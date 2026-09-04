@@ -8,7 +8,7 @@ from pathlib import Path
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
-from fixrepro_core.config import DEFAULT_DEVICE_URL, require_local_device_url
+from fixrepro_core.config import DEFAULT_DEVICE_URL, PATCHED_BUILD_ID, require_local_device_url
 from fixrepro_core.crypto import load_public_key_bytes
 from fixrepro_core.evaluation import (
     Decision,
@@ -20,7 +20,7 @@ from fixrepro_core.evaluation import (
 from fixrepro_core.gateway import process_gateway_update
 
 
-app = FastAPI(title="FixRepro Patched OTA Gateway", version="0.2.0")
+app = FastAPI(title="FixRepro Patched OTA Gateway", version="0.3.0")
 
 
 def _device_url() -> str:
@@ -47,7 +47,11 @@ def health() -> JSONResponse:
         return JSONResponse(status_code=503, content={"status": "error", "message": str(exc)})
     return JSONResponse(
         status_code=200,
-        content={"status": "ok", "gateway_role": GatewayRole.PATCHED.value},
+        content={
+            "status": "ok",
+            "gateway_role": GatewayRole.PATCHED.value,
+            "build_id": PATCHED_BUILD_ID,
+        },
     )
 
 

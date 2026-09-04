@@ -11,6 +11,7 @@ htmlcov/
 !.env.example
 .runtime/
 *.pem
+!evidence/demo-bundle/trust/trusted-public-key.pem
 *.key
 *.p12
 *.pfx

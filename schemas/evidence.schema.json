@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://fixrepro.example/schemas/evidence.schema.json",
-  "title": "FixRepro Evidence Bundle Manifest",
-  "description": "Schema for synthetic, hash-verified security regression evidence.",
+  "title": "FixRepro Verification Evidence",
+  "description": "Schema for a synthetic deterministic OTA patch-verification record.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -15,43 +15,25 @@
     "bundle_files"
   ],
   "properties": {
-    "schema_version": {
-      "type": "string",
-      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
-    },
+    "schema_version": {"const": "1.1"},
     "verification_id": {
       "type": "string",
-      "minLength": 1,
-      "maxLength": 128
+      "pattern": "^FR-[0-9]{8}T[0-9]{9}Z-[a-f0-9]{8}$"
     },
-    "created_at": {
-      "type": "string",
-      "format": "date-time"
-    },
-    "test_case": {
-      "$ref": "#/$defs/test_case"
-    },
+    "created_at": {"$ref": "#/$defs/utc_timestamp"},
+    "test_case": {"$ref": "#/$defs/test_case"},
     "executions": {
       "type": "array",
       "minItems": 3,
       "maxItems": 3,
-      "items": {
-        "$ref": "#/$defs/execution"
-      }
+      "items": {"$ref": "#/$defs/execution"}
     },
-    "verification_outcome": {
-      "enum": [
-        "PATCH_VERIFIED",
-        "PATCH_NOT_VERIFIED",
-        "INCONCLUSIVE"
-      ]
-    },
+    "verification_outcome": {"$ref": "#/$defs/verification_outcome"},
     "bundle_files": {
       "type": "array",
-      "minItems": 1,
-      "items": {
-        "$ref": "#/$defs/artifact"
-      }
+      "minItems": 7,
+      "maxItems": 7,
+      "items": {"$ref": "#/$defs/artifact"}
     }
   },
   "$defs": {
@@ -59,43 +41,26 @@
       "type": "string",
       "pattern": "^[a-f0-9]{64}$"
     },
+    "utc_timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{3}Z$"
+    },
     "decision": {
-      "enum": [
-        "ACCEPTED",
-        "REJECTED",
-        "ERROR"
-      ]
+      "enum": ["ACCEPTED", "REJECTED", "ERROR"]
+    },
+    "verification_outcome": {
+      "enum": ["PATCH_VERIFIED", "PATCH_NOT_VERIFIED", "INCONCLUSIVE"]
     },
     "test_case": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "case_id",
-        "title",
-        "security_property",
-        "positive_control_case_id"
-      ],
+      "required": ["case_id", "title", "security_property", "positive_control_case_id"],
       "properties": {
-        "case_id": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 128
-        },
-        "title": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 240
-        },
-        "security_property": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 500
-        },
-        "positive_control_case_id": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 128
-        }
+        "case_id": {"const": "OTA-UNTRUSTED-SIGNER-001"},
+        "title": {"type": "string", "minLength": 1, "maxLength": 240},
+        "security_property": {"type": "string", "minLength": 1, "maxLength": 500},
+        "positive_control_case_id": {"const": "OTA-TRUSTED-SIGNER-001"}
       }
     },
     "package": {
@@ -104,128 +69,64 @@
       "required": [
         "filename",
         "sha256",
+        "envelope_sha256",
         "signer_fingerprint",
         "signer_trust"
       ],
       "properties": {
-        "filename": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 255
-        },
-        "sha256": {
-          "$ref": "#/$defs/sha256"
-        },
-        "signer_fingerprint": {
-          "$ref": "#/$defs/sha256"
-        },
-        "signer_trust": {
-          "enum": [
-            "TRUSTED",
-            "UNTRUSTED"
-          ]
-        }
+        "filename": {"type": "string", "minLength": 1, "maxLength": 255},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "envelope_sha256": {"$ref": "#/$defs/sha256"},
+        "signer_fingerprint": {"$ref": "#/$defs/sha256"},
+        "signer_trust": {"enum": ["TRUSTED", "UNTRUSTED"]}
       }
     },
     "request": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "method",
-        "target",
-        "content_type",
-        "body_sha256"
-      ],
+      "required": ["method", "path", "content_type", "body_sha256"],
       "properties": {
-        "method": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 16
-        },
-        "target": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 255
-        },
-        "content_type": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 128
-        },
-        "body_sha256": {
-          "$ref": "#/$defs/sha256"
-        }
+        "method": {"const": "POST"},
+        "path": {"const": "/api/v1/updates"},
+        "content_type": {"const": "application/json"},
+        "body_sha256": {"$ref": "#/$defs/sha256"}
       }
     },
     "response": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "status_code",
-        "content_type",
-        "body_sha256"
-      ],
+      "required": ["http_status", "decision", "reason_code", "body_sha256"],
       "properties": {
-        "status_code": {
-          "type": "integer",
-          "minimum": 100,
-          "maximum": 599
-        },
-        "content_type": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 128
-        },
-        "body_sha256": {
-          "$ref": "#/$defs/sha256"
-        }
+        "http_status": {"type": "integer", "minimum": 100, "maximum": 599},
+        "decision": {"$ref": "#/$defs/decision"},
+        "reason_code": {"type": "string", "minLength": 1, "maxLength": 128},
+        "body_sha256": {"$ref": "#/$defs/sha256"}
       }
     },
     "device_state": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "device_id",
-        "firmware_version",
-        "state_sha256"
-      ],
+      "required": ["firmware_version", "update_counter", "last_payload_sha256"],
       "properties": {
-        "device_id": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 128
-        },
-        "firmware_version": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 64
-        },
-        "state_sha256": {
-          "$ref": "#/$defs/sha256"
+        "firmware_version": {"type": "string", "minLength": 1, "maxLength": 64},
+        "update_counter": {"type": "integer", "minimum": 0},
+        "last_payload_sha256": {
+          "oneOf": [
+            {"$ref": "#/$defs/sha256"},
+            {"type": "null"}
+          ]
         }
       }
     },
     "artifact": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "filename",
-        "sha256"
-      ],
+      "required": ["path", "sha256", "size_bytes", "media_type"],
       "properties": {
-        "filename": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 255
-        },
-        "sha256": {
-          "$ref": "#/$defs/sha256"
-        },
-        "media_type": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 128
-        }
+        "path": {"type": "string", "minLength": 1, "maxLength": 500},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "size_bytes": {"type": "integer", "minimum": 0},
+        "media_type": {"type": "string", "minLength": 1, "maxLength": 128}
       }
     },
     "execution": {
@@ -250,63 +151,26 @@
       "properties": {
         "execution_id": {
           "type": "string",
-          "minLength": 1,
-          "maxLength": 128
+          "pattern": "^EX-(VULNERABLE|PATCHED|POSITIVE_CONTROL)-[a-f0-9]{8}$"
         },
-        "role": {
-          "enum": [
-            "VULNERABLE",
-            "PATCHED",
-            "POSITIVE_CONTROL"
-          ]
-        },
+        "role": {"enum": ["VULNERABLE", "PATCHED", "POSITIVE_CONTROL"]},
         "build_id": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 128
+          "enum": ["FIXREPRO-VULNERABLE-OTA-1", "FIXREPRO-PATCHED-OTA-1"]
         },
-        "started_at": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "finished_at": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "package": {
-          "$ref": "#/$defs/package"
-        },
-        "request": {
-          "$ref": "#/$defs/request"
-        },
-        "response": {
-          "$ref": "#/$defs/response"
-        },
-        "device_state_before": {
-          "$ref": "#/$defs/device_state"
-        },
-        "device_state_after": {
-          "$ref": "#/$defs/device_state"
-        },
-        "secure_expected_decision": {
-          "$ref": "#/$defs/decision"
-        },
-        "observed_decision": {
-          "$ref": "#/$defs/decision"
-        },
-        "security_verdict": {
-          "enum": [
-            "PASS",
-            "FAIL",
-            "INCONCLUSIVE"
-          ]
-        },
+        "started_at": {"$ref": "#/$defs/utc_timestamp"},
+        "finished_at": {"$ref": "#/$defs/utc_timestamp"},
+        "package": {"$ref": "#/$defs/package"},
+        "request": {"$ref": "#/$defs/request"},
+        "response": {"$ref": "#/$defs/response"},
+        "device_state_before": {"$ref": "#/$defs/device_state"},
+        "device_state_after": {"$ref": "#/$defs/device_state"},
+        "secure_expected_decision": {"$ref": "#/$defs/decision"},
+        "observed_decision": {"$ref": "#/$defs/decision"},
+        "security_verdict": {"enum": ["PASS", "FAIL", "INCONCLUSIVE"]},
         "artifacts": {
           "type": "array",
           "minItems": 1,
-          "items": {
-            "$ref": "#/$defs/artifact"
-          }
+          "items": {"$ref": "#/$defs/artifact"}
         }
       }
     }

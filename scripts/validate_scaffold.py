@@ -23,7 +23,7 @@ REQUIRED_FILES = (
     ".gitignore",
     ".gitattributes",
     "app/.gitkeep",
-    "verifier/.gitkeep",
+    "verifier/__init__.py",
     "targets/vulnerable/.gitkeep",
     "targets/patched/.gitkeep",
     "device/.gitkeep",
@@ -55,7 +55,7 @@ EXPECTED_TECHNOLOGIES = [
 ]
 
 SHA256_RE = re.compile(r"^[a-f0-9]{64}$")
-PRIVATE_KEY_SUFFIXES = {".pem", ".key", ".p12", ".pfx"}
+PRIVATE_KEY_SUFFIXES = {".key", ".p12", ".pfx"}
 PRIVATE_KEY_NAMES = {"id_" + "rsa", "id_" + "ed25519"}
 FORBIDDEN_STRINGS = (
     "V" + "INCE",
@@ -98,7 +98,11 @@ def validate_all_json(failures: list[str]) -> int:
     count = 0
     ignored_parts = {".git", ".venv", ".runtime", "__pycache__"}
     for path in sorted(ROOT.rglob("*.json")):
-        if any(part in ignored_parts or part.endswith(".egg-info") for part in path.parts):
+        relative = path.relative_to(ROOT)
+        if (
+            relative.parts[:2] == ("evidence", "runs")
+            or any(part in ignored_parts or part.endswith(".egg-info") for part in path.parts)
+        ):
             continue
         count += 1
         try:
@@ -179,6 +183,12 @@ def validate_schema(failures: list[str]) -> None:
         schema.get("$schema"),
         "https://json-schema.org/draft/2020-12/schema",
     )
+    expect_equal(
+        failures,
+        "evidence schema version",
+        schema.get("properties", {}).get("schema_version", {}).get("const"),
+        "1.1",
+    )
     required = {
         "schema_version",
         "verification_id",
@@ -198,7 +208,10 @@ def walk_hashes(value: Any, path: str = "sample") -> list[tuple[str, Any]]:
     if isinstance(value, dict):
         for key, child in value.items():
             child_path = f"{path}.{key}"
-            if key == "sha256" or key.endswith("_sha256") or key == "signer_fingerprint":
+            if (
+                child is not None
+                and (key == "sha256" or key.endswith("_sha256") or key == "signer_fingerprint")
+            ):
                 found.append((child_path, child))
             found.extend(walk_hashes(child, child_path))
     elif isinstance(value, list):
@@ -283,6 +296,13 @@ def validate_sample(failures: list[str]) -> None:
         patched_hash,
         vulnerable_hash,
     )
+    vulnerable_envelope = by_role["VULNERABLE"].get("package", {}).get("envelope_sha256")
+    patched_envelope = by_role["PATCHED"].get("package", {}).get("envelope_sha256")
+    vulnerable_body = by_role["VULNERABLE"].get("request", {}).get("body_sha256")
+    patched_body = by_role["PATCHED"].get("request", {}).get("body_sha256")
+    expect_equal(failures, "vulnerable and patched envelope SHA-256", patched_envelope, vulnerable_envelope)
+    expect_equal(failures, "vulnerable and patched request body SHA-256", patched_body, vulnerable_body)
+    expect_equal(failures, "vulnerable envelope and request body SHA-256", vulnerable_body, vulnerable_envelope)
     expect_equal(
         failures,
         "verification_outcome",

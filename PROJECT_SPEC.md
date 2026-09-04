@@ -6,7 +6,7 @@ This document fixes the Phase 1 product contract. Later work must preserve these
 
 ## Product objective
 
-FixRepro will replay an identical controlled security regression test against synthetic vulnerable and patched IoT OTA builds. It will record hash-verified evidence and run a positive control so that a patch is credited only when unsafe behavior is removed without breaking the intended update path.
+FixRepro replays an identical controlled security regression test against synthetic vulnerable and patched IoT OTA builds. It records hash-verified evidence and runs a positive control so that a patch is credited only when unsafe behavior is removed without breaking the intended update path.
 
 ## Target users
 
@@ -69,6 +69,7 @@ Each execution must record:
 - UTC start and finish times
 - Software build identifier
 - Package filename and SHA-256
+- Complete package envelope SHA-256 and request body SHA-256
 - Signer fingerprint and trust classification
 - Request method, target, selected metadata, and body hash
 - Response status, selected metadata, and body hash
@@ -110,19 +111,31 @@ The future MVP is complete only when:
 
 | Component | Port | Status after Phase 2 |
 |---|---:|---|
-| Control plane and web interface | 8000 | Planned |
+| Control plane and final web dashboard | 8000 | Planned |
 | Vulnerable OTA gateway | 8101 | Implemented for localhost demonstration |
 | Patched OTA gateway | 8102 | Implemented for localhost demonstration |
 | Virtual IoT device simulator | 8200 | Implemented for localhost demonstration |
 
-The deterministic verifier, evidence generator, and report generator are planned internal components and do not require public ports.
+The deterministic orchestrator, verdict engine, evidence generator, HTML report generator, manifest generator, and independent bundle verifier are implemented internal components and do not require public ports.
+
+## Phase 3 implemented components
+
+- Deterministic verification orchestrator
+- Pure deterministic verdict engine
+- Strict Pydantic evidence model and JSON Schema 1.1
+- Atomic evidence and raw-artifact generation
+- Self-contained HTML verification report
+- Tamper-evident manifest with a separate root digest
+- Independent bundle verification with verdict recomputation
+
+The final dashboard, Docker Compose environment, GitHub Actions workflow, submission screenshots, and demonstration video remain unimplemented.
 
 ## Future implementation phases
 
 1. **Phase 1 (complete):** repository scaffold, executable specification, cases, evidence contract, and documentation.
 2. **Phase 2 (complete):** synthetic virtual device, vulnerable and patched OTA gateways, in-memory signing identities, package generation, three-scenario runner, and deterministic unit tests.
-3. **Phase 3:** verifier, evidence-bundle generator, schema validation, and report generator.
+3. **Phase 3 (complete):** verifier, evidence-bundle generator, schema validation, HTML report, manifest, and independent bundle verification.
 4. **Phase 4:** control plane, plain web interface, Docker Compose integration, and end-to-end tests.
 5. **Phase 5:** GitHub Actions, demonstration hardening, accessibility review, and final presentation assets.
 
-Phases 1 and 2 are represented as complete in this repository state. The complete product and its Phase 3 through Phase 5 components are not implemented.
+Phases 1 through 3 are represented as complete in this repository state. The final dashboard, container environment, continuous integration, and presentation assets remain future work.

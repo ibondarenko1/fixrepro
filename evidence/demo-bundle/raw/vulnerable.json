@@ -1,0 +1,42 @@
+{
+  "device_state_after": {
+    "firmware_version": "9.9.0-test",
+    "last_payload_sha256": "9ce53074ca18d2d1be0682bcea7e77f890bac337b28e714a615ce63f77e3841d",
+    "update_counter": 1
+  },
+  "device_state_before": {
+    "firmware_version": "1.0.0",
+    "last_payload_sha256": null,
+    "update_counter": 0
+  },
+  "execution_id": "EX-VULNERABLE-9f4b5808",
+  "finished_at": "2026-09-04T06:00:57.032Z",
+  "gateway_response": {
+    "decision": "ACCEPTED",
+    "device_state_after": {
+      "firmware_version": "9.9.0-test",
+      "last_payload_sha256": "9ce53074ca18d2d1be0682bcea7e77f890bac337b28e714a615ce63f77e3841d",
+      "update_counter": 1
+    },
+    "device_state_before": {
+      "firmware_version": "1.0.0",
+      "last_payload_sha256": null,
+      "update_counter": 0
+    },
+    "firmware_version": "9.9.0-test",
+    "gateway_role": "VULNERABLE",
+    "package_id": "ota-untrusted-signer-001",
+    "payload_sha256": "9ce53074ca18d2d1be0682bcea7e77f890bac337b28e714a615ce63f77e3841d",
+    "reason_code": "CHECKSUM_ONLY_ACCEPTED",
+    "signer_fingerprint": "350d021d9f0149a076d6180f0f5f2ac398b845b208973a6e1e7a8862f3de25e9"
+  },
+  "request": {
+    "body_sha256": "36c31c354deefec74ddda47da39ebfb787bff9800174f7cc3c5ef7158e1d7c38",
+    "content_type": "application/json",
+    "method": "POST",
+    "path": "/api/v1/updates"
+  },
+  "reset_confirmed": true,
+  "role": "VULNERABLE",
+  "started_at": "2026-09-04T06:00:55.937Z"
+}

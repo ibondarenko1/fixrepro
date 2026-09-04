@@ -62,7 +62,7 @@ This threat model covers a future localhost-only, synthetic IoT OTA security dem
 
 ## Evidence-integrity limitations
 
-The future bundle is intended to be hash-verified and tamper-evident. SHA-256 values can show that a file differs from the value recorded in the manifest. They do not make evidence tamper-proof, prove who controlled the host, provide trusted time, or prevent coordinated replacement of both an artifact and its manifest entry. The evidence document must not contain its own hash because that would create a circular definition.
+The implemented bundle is hash-verified and tamper-evident. SHA-256 values can show that a file differs from the value recorded in the manifest. They do not make evidence tamper-proof, prove who controlled the host, provide trusted time, or prevent coordinated replacement of both an artifact and its manifest entry. The evidence document does not contain its own hash because that would create a circular definition.
 
 ## Safe demonstration constraints
 

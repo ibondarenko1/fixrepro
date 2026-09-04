@@ -3,61 +3,61 @@
     {
       "media_type": "application/json",
       "path": "packages/trusted-update.json",
-      "sha256": "8888888888888888888888888888888888888888888888888888888888888888",
-      "size_bytes": 640
+      "sha256": "0b191365e8d1e03f35c8b19751ba413e8e8b24554b7f5d8f3f15700f8cc9bfee",
+      "size_bytes": 672
     },
     {
       "media_type": "application/json",
       "path": "packages/untrusted-update.json",
-      "sha256": "6666666666666666666666666666666666666666666666666666666666666666",
-      "size_bytes": 660
+      "sha256": "36c31c354deefec74ddda47da39ebfb787bff9800174f7cc3c5ef7158e1d7c38",
+      "size_bytes": 679
     },
     {
       "media_type": "application/json",
       "path": "raw/patched.json",
-      "sha256": "4444444444444444444444444444444444444444444444444444444444444444",
-      "size_bytes": 1200
+      "sha256": "63be6adceb008e0613246fc67b9c5860813e746a2ff762a00221068b497a3aa7",
+      "size_bytes": 1280
     },
     {
       "media_type": "application/json",
       "path": "raw/positive-control.json",
-      "sha256": "5555555555555555555555555555555555555555555555555555555555555555",
-      "size_bytes": 1200
+      "sha256": "60fe47882a572f4932bc78eccf3d66c3301ea00ca46ca97902c62f3d6881dccf",
+      "size_bytes": 1425
     },
     {
       "media_type": "application/json",
       "path": "raw/vulnerable.json",
-      "sha256": "3333333333333333333333333333333333333333333333333333333333333333",
-      "size_bytes": 1200
+      "sha256": "64a40ea6c0b610cf8e2f52dc9e79e77c83c158a992f847ea55f6a9323677eb2d",
+      "size_bytes": 1429
     },
     {
       "media_type": "text/plain",
       "path": "run.log",
-      "sha256": "7777777777777777777777777777777777777777777777777777777777777777",
-      "size_bytes": 480
+      "sha256": "f5fa69076b0f672218daffead45e968e427a7cba5ab9a9402114741620e29232",
+      "size_bytes": 322
     },
     {
       "media_type": "application/x-pem-file",
       "path": "trust/trusted-public-key.pem",
-      "sha256": "9999999999999999999999999999999999999999999999999999999999999999",
+      "sha256": "5ca5a200bdb16e70005fc618e5568ec08d78498bef423ff03e62ed8bec15b6ed",
       "size_bytes": 113
     }
   ],
-  "created_at": "2026-09-04T03:00:00.000Z",
+  "created_at": "2026-09-04T06:00:48.831Z",
   "executions": [
     {
       "artifacts": [
         {
           "media_type": "application/json",
           "path": "raw/vulnerable.json",
-          "sha256": "3333333333333333333333333333333333333333333333333333333333333333",
-          "size_bytes": 1200
+          "sha256": "64a40ea6c0b610cf8e2f52dc9e79e77c83c158a992f847ea55f6a9323677eb2d",
+          "size_bytes": 1429
         }
       ],
       "build_id": "FIXREPRO-VULNERABLE-OTA-1",
       "device_state_after": {
         "firmware_version": "9.9.0-test",
-        "last_payload_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+        "last_payload_sha256": "9ce53074ca18d2d1be0682bcea7e77f890bac337b28e714a615ce63f77e3841d",
         "update_counter": 1
       },
       "device_state_before": {
@@ -65,40 +65,40 @@
         "last_payload_sha256": null,
         "update_counter": 0
       },
-      "execution_id": "EX-VULNERABLE-a1b2c3d4",
-      "finished_at": "2026-09-04T03:00:02.000Z",
+      "execution_id": "EX-VULNERABLE-9f4b5808",
+      "finished_at": "2026-09-04T06:00:57.032Z",
       "observed_decision": "ACCEPTED",
       "package": {
-        "envelope_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "envelope_sha256": "36c31c354deefec74ddda47da39ebfb787bff9800174f7cc3c5ef7158e1d7c38",
         "filename": "packages/untrusted-update.json",
-        "sha256": "1111111111111111111111111111111111111111111111111111111111111111",
-        "signer_fingerprint": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "sha256": "9ce53074ca18d2d1be0682bcea7e77f890bac337b28e714a615ce63f77e3841d",
+        "signer_fingerprint": "350d021d9f0149a076d6180f0f5f2ac398b845b208973a6e1e7a8862f3de25e9",
         "signer_trust": "UNTRUSTED"
       },
       "request": {
-        "body_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "body_sha256": "36c31c354deefec74ddda47da39ebfb787bff9800174f7cc3c5ef7158e1d7c38",
         "content_type": "application/json",
         "method": "POST",
         "path": "/api/v1/updates"
       },
-      "role": "VULNERABLE",
       "response": {
-        "body_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "body_sha256": "085dd9f6dc761992f4fec08775021422e2c6d7238b1b16c726d5355d24f9a4bd",
         "decision": "ACCEPTED",
         "http_status": 200,
         "reason_code": "CHECKSUM_ONLY_ACCEPTED"
       },
+      "role": "VULNERABLE",
       "secure_expected_decision": "REJECTED",
       "security_verdict": "FAIL",
-      "started_at": "2026-09-04T03:00:01.000Z"
+      "started_at": "2026-09-04T06:00:55.937Z"
     },
     {
       "artifacts": [
         {
           "media_type": "application/json",
           "path": "raw/patched.json",
-          "sha256": "4444444444444444444444444444444444444444444444444444444444444444",
-          "size_bytes": 1200
+          "sha256": "63be6adceb008e0613246fc67b9c5860813e746a2ff762a00221068b497a3aa7",
+          "size_bytes": 1280
         }
       ],
       "build_id": "FIXREPRO-PATCHED-OTA-1",
@@ -112,46 +112,46 @@
         "last_payload_sha256": null,
         "update_counter": 0
       },
-      "execution_id": "EX-PATCHED-b2c3d4e5",
-      "finished_at": "2026-09-04T03:00:04.000Z",
+      "execution_id": "EX-PATCHED-7b66006f",
+      "finished_at": "2026-09-04T06:00:57.577Z",
       "observed_decision": "REJECTED",
       "package": {
-        "envelope_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "envelope_sha256": "36c31c354deefec74ddda47da39ebfb787bff9800174f7cc3c5ef7158e1d7c38",
         "filename": "packages/untrusted-update.json",
-        "sha256": "1111111111111111111111111111111111111111111111111111111111111111",
-        "signer_fingerprint": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "sha256": "9ce53074ca18d2d1be0682bcea7e77f890bac337b28e714a615ce63f77e3841d",
+        "signer_fingerprint": "350d021d9f0149a076d6180f0f5f2ac398b845b208973a6e1e7a8862f3de25e9",
         "signer_trust": "UNTRUSTED"
       },
       "request": {
-        "body_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "body_sha256": "36c31c354deefec74ddda47da39ebfb787bff9800174f7cc3c5ef7158e1d7c38",
         "content_type": "application/json",
         "method": "POST",
         "path": "/api/v1/updates"
       },
-      "role": "PATCHED",
       "response": {
-        "body_sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+        "body_sha256": "8fde613fb7cd411c0cbeddefbcc3033e4ef405becdb7f5a249b2385925ccbf14",
         "decision": "REJECTED",
         "http_status": 403,
         "reason_code": "UNTRUSTED_SIGNER"
       },
+      "role": "PATCHED",
       "secure_expected_decision": "REJECTED",
       "security_verdict": "PASS",
-      "started_at": "2026-09-04T03:00:03.000Z"
+      "started_at": "2026-09-04T06:00:57.032Z"
     },
     {
       "artifacts": [
         {
           "media_type": "application/json",
           "path": "raw/positive-control.json",
-          "sha256": "5555555555555555555555555555555555555555555555555555555555555555",
-          "size_bytes": 1200
+          "sha256": "60fe47882a572f4932bc78eccf3d66c3301ea00ca46ca97902c62f3d6881dccf",
+          "size_bytes": 1425
         }
       ],
       "build_id": "FIXREPRO-PATCHED-OTA-1",
       "device_state_after": {
         "firmware_version": "1.1.0",
-        "last_payload_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+        "last_payload_sha256": "4663d4657a6714d9f86d3dd22634b6b7c179df389fdb93cc5a68d640f6e8bc59",
         "update_counter": 1
       },
       "device_state_before": {
@@ -159,32 +159,32 @@
         "last_payload_sha256": null,
         "update_counter": 0
       },
-      "execution_id": "EX-POSITIVE_CONTROL-c3d4e5f6",
-      "finished_at": "2026-09-04T03:00:06.000Z",
+      "execution_id": "EX-POSITIVE_CONTROL-ea064064",
+      "finished_at": "2026-09-04T06:00:58.499Z",
       "observed_decision": "ACCEPTED",
       "package": {
-        "envelope_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "envelope_sha256": "0b191365e8d1e03f35c8b19751ba413e8e8b24554b7f5d8f3f15700f8cc9bfee",
         "filename": "packages/trusted-update.json",
-        "sha256": "2222222222222222222222222222222222222222222222222222222222222222",
-        "signer_fingerprint": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "sha256": "4663d4657a6714d9f86d3dd22634b6b7c179df389fdb93cc5a68d640f6e8bc59",
+        "signer_fingerprint": "5fa010ddf64e9974f025536d5723f68f04b75ecb7e52e8b67330c4b76771d63a",
         "signer_trust": "TRUSTED"
       },
       "request": {
-        "body_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "body_sha256": "0b191365e8d1e03f35c8b19751ba413e8e8b24554b7f5d8f3f15700f8cc9bfee",
         "content_type": "application/json",
         "method": "POST",
         "path": "/api/v1/updates"
       },
-      "role": "POSITIVE_CONTROL",
       "response": {
-        "body_sha256": "1212121212121212121212121212121212121212121212121212121212121212",
+        "body_sha256": "5f0be5b079abbcdcd5a6abf6b4c6dac8d446b2f3aa0bd08c1b8ebdc8c5a582c1",
         "decision": "ACCEPTED",
         "http_status": 200,
         "reason_code": "TRUSTED_SIGNATURE_ACCEPTED"
       },
+      "role": "POSITIVE_CONTROL",
       "secure_expected_decision": "ACCEPTED",
       "security_verdict": "PASS",
-      "started_at": "2026-09-04T03:00:05.000Z"
+      "started_at": "2026-09-04T06:00:57.577Z"
     }
   ],
   "schema_version": "1.1",
@@ -194,6 +194,6 @@
     "security_property": "An OTA gateway must accept an update only when package integrity is valid and the Ed25519 signature verifies against the configured trusted public key.",
     "title": "Reject an integrity-valid OTA package signed by an untrusted key"
   },
-  "verification_id": "FR-20260904T030000000Z-abcdef12",
+  "verification_id": "FR-20260904T060048831Z-3eb072d7",
   "verification_outcome": "PATCH_VERIFIED"
 }

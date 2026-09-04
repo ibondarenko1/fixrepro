@@ -12,12 +12,16 @@ import os
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
-from fixrepro_core.config import DEFAULT_DEVICE_URL, require_local_device_url
+from fixrepro_core.config import (
+    DEFAULT_DEVICE_URL,
+    VULNERABLE_BUILD_ID,
+    require_local_device_url,
+)
 from fixrepro_core.evaluation import GatewayRole, evaluate_vulnerable_policy
 from fixrepro_core.gateway import process_gateway_update
 
 
-app = FastAPI(title="FixRepro Vulnerable OTA Gateway", version="0.2.0")
+app = FastAPI(title="FixRepro Vulnerable OTA Gateway", version="0.3.0")
 
 
 def _device_url() -> str:
@@ -27,7 +31,11 @@ def _device_url() -> str:
 @app.get("/health")
 def health() -> dict[str, str]:
     _device_url()
-    return {"status": "ok", "gateway_role": GatewayRole.VULNERABLE.value}
+    return {
+        "status": "ok",
+        "gateway_role": GatewayRole.VULNERABLE.value,
+        "build_id": VULNERABLE_BUILD_ID,
+    }
 
 
 @app.post("/api/v1/updates")

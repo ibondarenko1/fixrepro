@@ -1,0 +1,14 @@
+{
+  "manifest": {
+    "firmware_version": "9.9.0-test",
+    "package_id": "ota-untrusted-signer-001",
+    "payload_sha256": "9ce53074ca18d2d1be0682bcea7e77f890bac337b28e714a615ce63f77e3841d",
+    "payload_size": 68,
+    "schema_version": "1.0",
+    "signature_algorithm": "Ed25519"
+  },
+  "payload_b64": "Rml4UmVwcm8gaGFybWxlc3Mgc3ludGhldGljIHRlc3QgZmlybXdhcmUgZnJvbSBhbiB1bnRydXN0ZWQgc2lnbmVyLgo=",
+  "signature_b64": "1JDclYgLR05XgrdS0hQgaXtRDRJMiZqx4BQa11IjrW2YK1zzCrIVdxtWLpCGNqkAwrF+0GvYxPRWrDVEp81RBg==",
+  "signer_fingerprint": "350d021d9f0149a076d6180f0f5f2ac398b845b208973a6e1e7a8862f3de25e9",
+  "signer_public_key_b64": "zgx8linu0mSUHJ4NY4u8uTMRY43QdesxwPpSOEAaVcE="
+}

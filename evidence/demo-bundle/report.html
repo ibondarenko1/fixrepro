@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FixRepro verification report</title>
+  <style>
+    :root { color-scheme: light; --ink:#17202a; --muted:#536273; --line:#d9e1e8; --surface:#f5f7f9; --pass:#12633a; --warn:#8a3b12; --accent:#174ea6; }
+    * { box-sizing:border-box; }
+    body { margin:0; font:16px/1.5 system-ui,sans-serif; color:var(--ink); background:#fff; }
+    main { width:min(1120px,100%); margin:auto; padding:clamp(20px,4vw,52px); }
+    h1 { margin:.15rem 0; font-size:clamp(2rem,6vw,4rem); line-height:1; }
+    h2 { margin-top:2.25rem; }
+    .eyebrow,.status { font-weight:800; letter-spacing:.05em; text-transform:uppercase; }
+    .hero { border-bottom:4px solid var(--accent); padding-bottom:1.5rem; }
+    .outcome { display:inline-block; margin:1rem 0; padding:.55rem .8rem; color:#fff; background:var(--pass); border-radius:.35rem; font-weight:900; }
+    .meta { color:var(--muted); overflow-wrap:anywhere; }
+    .grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1rem; }
+    .card { border:1px solid var(--line); border-top:7px solid var(--pass); border-radius:.6rem; padding:1rem; background:var(--surface); }
+    .card.unsafe { border-top-color:var(--warn); }
+    .card h3 { margin:.2rem 0 .8rem; }
+    .card .status { font-size:.8rem; }
+    .card.unsafe .status { color:var(--warn); }
+    .card.safe .status { color:var(--pass); }
+    dl div { display:grid; grid-template-columns:6rem 1fr; gap:.5rem; border-top:1px solid var(--line); padding:.45rem 0; }
+    dt { font-weight:700; } dd { margin:0; overflow-wrap:anywhere; }
+    code { font-family:ui-monospace,monospace; overflow-wrap:anywhere; }
+    .proof { border-left:5px solid var(--accent); padding:1rem 1.2rem; background:#eef4ff; }
+    table { width:100%; border-collapse:collapse; font-size:.9rem; }
+    th,td { text-align:left; vertical-align:top; padding:.6rem; border:1px solid var(--line); overflow-wrap:anywhere; }
+    th { background:var(--surface); }
+    .table-wrap { overflow-x:auto; }
+    @media (max-width:760px) { .grid { grid-template-columns:1fr; } main { padding:20px; } }
+  </style>
+</head>
+<body>
+<main>
+  <header class="hero">
+    <p class="eyebrow">Reproducible Security Patch Verification.</p>
+    <h1>FixRepro</h1>
+    <p class="outcome" role="status"><span aria-hidden="true">●</span> PATCH VERIFIED</p>
+    <p class="meta">Verification ID: <code>FR-20260904T060048831Z-3eb072d7</code><br>Created: 2026-09-04T06:00:48.831Z</p>
+    <p><strong>Tested security property:</strong> An OTA gateway must accept an update only when package integrity is valid and the Ed25519 signature verifies against the configured trusted public key.</p>
+  </header>
+
+  <h2>Result at a glance</h2>
+  <section class="grid" aria-label="Verification results">
+
+        <article class="card unsafe">
+          <p class="status"><span aria-hidden="true">●</span> UNSAFE BEHAVIOR REPRODUCED</p>
+          <h3>Vulnerable baseline</h3>
+          <dl>
+            <div><dt>Build</dt><dd>FIXREPRO-VULNERABLE-OTA-1</dd></div>
+            <div><dt>Decision</dt><dd>ACCEPTED</dd></div>
+            <div><dt>Reason</dt><dd>CHECKSUM_ONLY_ACCEPTED</dd></div>
+            <div><dt>Device</dt><dd>1.0.0 → 9.9.0-test</dd></div>
+            <div><dt>Verdict</dt><dd>FAIL</dd></div>
+          </dl>
+        </article>
+
+        <article class="card safe">
+          <p class="status"><span aria-hidden="true">●</span> PATCH BLOCKED SAME INPUT</p>
+          <h3>Patched security test</h3>
+          <dl>
+            <div><dt>Build</dt><dd>FIXREPRO-PATCHED-OTA-1</dd></div>
+            <div><dt>Decision</dt><dd>REJECTED</dd></div>
+            <div><dt>Reason</dt><dd>UNTRUSTED_SIGNER</dd></div>
+            <div><dt>Device</dt><dd>1.0.0 → 1.0.0</dd></div>
+            <div><dt>Verdict</dt><dd>PASS</dd></div>
+          </dl>
+        </article>
+
+        <article class="card safe">
+          <p class="status"><span aria-hidden="true">●</span> LEGITIMATE UPDATE PRESERVED</p>
+          <h3>Trusted positive control</h3>
+          <dl>
+            <div><dt>Build</dt><dd>FIXREPRO-PATCHED-OTA-1</dd></div>
+            <div><dt>Decision</dt><dd>ACCEPTED</dd></div>
+            <div><dt>Reason</dt><dd>TRUSTED_SIGNATURE_ACCEPTED</dd></div>
+            <div><dt>Device</dt><dd>1.0.0 → 1.1.0</dd></div>
+            <div><dt>Verdict</dt><dd>PASS</dd></div>
+          </dl>
+        </article>
+  </section>
+
+  <h2>Same-input proof</h2>
+  <div class="proof">
+    <p><strong>The exact same package bytes were replayed.</strong></p>
+    <p>Full untrusted package envelope SHA-256:<br><code>36c31c354deefec74ddda47da39ebfb787bff9800174f7cc3c5ef7158e1d7c38</code></p>
+    <p>The trusted positive control was ACCEPTED and changed the device to 1.1.0.</p>
+  </div>
+
+  <h2>Evidence artifacts</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Path</th><th>Media type</th><th>Bytes</th><th>SHA-256</th></tr></thead>
+    <tbody><tr><td><code>packages/trusted-update.json</code></td><td>application/json</td><td>672</td><td><code>0b191365e8d1e03f35c8b19751ba413e8e8b24554b7f5d8f3f15700f8cc9bfee</code></td></tr><tr><td><code>packages/untrusted-update.json</code></td><td>application/json</td><td>679</td><td><code>36c31c354deefec74ddda47da39ebfb787bff9800174f7cc3c5ef7158e1d7c38</code></td></tr><tr><td><code>raw/patched.json</code></td><td>application/json</td><td>1280</td><td><code>63be6adceb008e0613246fc67b9c5860813e746a2ff762a00221068b497a3aa7</code></td></tr><tr><td><code>raw/positive-control.json</code></td><td>application/json</td><td>1425</td><td><code>60fe47882a572f4932bc78eccf3d66c3301ea00ca46ca97902c62f3d6881dccf</code></td></tr><tr><td><code>raw/vulnerable.json</code></td><td>application/json</td><td>1429</td><td><code>64a40ea6c0b610cf8e2f52dc9e79e77c83c158a992f847ea55f6a9323677eb2d</code></td></tr><tr><td><code>run.log</code></td><td>text/plain</td><td>322</td><td><code>f5fa69076b0f672218daffead45e968e427a7cba5ab9a9402114741620e29232</code></td></tr><tr><td><code>trust/trusted-public-key.pem</code></td><td>application/x-pem-file</td><td>113</td><td><code>5ca5a200bdb16e70005fc618e5568ec08d78498bef423ff03e62ed8bec15b6ed</code></td></tr></tbody>
+  </table></div>
+
+  <h2>Bundle root digest</h2>
+  <p>The final bundle digest is stored in <code>manifest.sha256</code>. It is intentionally not embedded here because <code>report.html</code> is itself covered by <code>manifest.json</code>.</p>
+  <p>Verify this bundle locally with:</p>
+  <pre><code>python scripts/verify_bundle.py evidence/demo-bundle</code></pre>
+
+  <h2>Safety scope</h2>
+  <p>This is a controlled synthetic IoT OTA demonstration. It uses localhost services, harmless test firmware, generated in-memory signing identities, and deterministic observations. It does not test external systems or real vendor firmware.</p>
+
+  <h2>Limitations</h2>
+  <p>PATCH VERIFIED applies only to this defined regression case under the recorded test conditions. It does not show that every vulnerability is fixed or that the build is generally secure.</p>
+  <p>The bundle is tamper-evident when its published manifest digest is retained separately. It is not a substitute for an externally trusted digital signature or independent laboratory validation.</p>
+</main>
+</body>
+</html>

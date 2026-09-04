@@ -1,110 +1,98 @@
 # Architecture
 
-Phase 2 implements the three localhost OTA lab services, shared package and policy logic, runtime artifact generation, and the demonstration runner. The control plane, web interface, standalone verification orchestrator, evidence bundle, and report generator remain planned.
+Phase 3 implements the localhost OTA lab, deterministic verification orchestrator, evidence and report generation, manifest creation, and independent bundle verification. The final dashboard remains planned.
 
-## Component responsibilities
+## Components
 
-| Component | Responsibility | Port | Status |
-|---|---|---:|---|
-| Control plane and web interface | Orchestrate resets and executions, display deterministic results, and expose evidence downloads | 8000 | Planned |
-| Vulnerable OTA gateway | Model the unsafe integrity-only acceptance behavior | 8101 | Implemented |
-| Patched OTA gateway | Enforce package integrity and Ed25519 signer trust | 8102 | Implemented |
-| Virtual IoT device simulator | Hold synthetic firmware state and apply authorized version changes | 8200 | Implemented |
-| Deterministic verifier | Derive individual verdicts and the overall outcome from recorded observations | Internal | Planned; Phase 2 runner uses fixed assertions only |
-| Evidence bundle generator | Write execution records, artifact manifests, and SHA-256 values | Internal | Planned |
-| Report generator | Produce a human-readable summary from the verified evidence | Internal | Planned |
+| Component | Responsibility | Interface | Status |
+|---|---|---|---|
+| Virtual device | Hold resettable synthetic firmware state | `127.0.0.1:8200` | Implemented |
+| Vulnerable OTA gateway | Model integrity-only update acceptance | `127.0.0.1:8101` | Implemented |
+| Patched OTA gateway | Enforce payload integrity, signer trust, and Ed25519 verification | `127.0.0.1:8102` | Implemented |
+| Verification orchestrator | Start services, reset state, replay packages, and collect observations | Local Python API and CLI | Implemented |
+| Verdict engine | Derive individual and overall outcomes using pure functions | Internal | Implemented |
+| Evidence generator | Write raw records and schema-valid `evidence.json` atomically | Internal | Implemented |
+| Report generator | Render a self-contained HTML explanation from finalized evidence | Internal | Implemented |
+| Bundle generator | Hash final artifacts and publish a root manifest digest | Internal | Implemented |
+| Bundle verifier | Check paths, files, schema, package identity, and recomputed verdicts | Local CLI | Implemented |
+| Final web dashboard | Present and initiate verification runs | Planned port 8000 | Planned |
+
+## Implemented data flow
+
+1. Fresh trusted and untrusted signing identities are created in memory. Only public keys and signed synthetic packages are written under ignored runtime storage.
+2. The orchestrator reads the untrusted package once and retains that immutable byte array for both the vulnerable and patched requests.
+3. The three services start on fixed loopback ports and expose stable build identifiers.
+4. Before each scenario, the orchestrator resets the device and confirms the complete initial state.
+5. Each request, response hash, gateway decision, reason code, and independently read device state is recorded.
+6. Pure verdict functions derive individual verdicts and the overall outcome.
+7. Package copies, raw scenario records, the trusted public key, and the high-level run log are finalized first.
+8. `evidence.json` lists those artifacts, followed by `report.html`, `manifest.json`, and `manifest.sha256`.
+9. The independent verifier checks the staged bundle before publication and checks the published bundle again.
 
 ## Trust boundaries
 
-1. **Operator to control plane:** the operator selects a fixed case but does not supply verdicts.
-2. **Control plane to gateways:** the same untrusted package bytes must cross this boundary for the vulnerable and patched executions.
-3. **Gateways to virtual device:** a gateway decision controls whether the simulated device may change state.
-4. **Runtime to verifier:** observations are inputs; the verifier must not trust service-reported verdicts.
-5. **Verifier to evidence storage:** hashes can reveal later modification but cannot prevent replacement by an actor who controls both evidence and reference hashes.
+1. **Operator to orchestrator:** CLI arguments select output behavior but cannot provide verdicts.
+2. **Orchestrator to gateways:** the same untrusted byte array crosses this boundary twice.
+3. **Gateways to device:** a gateway decision controls whether synthetic state may change.
+4. **Runtime observations to stored evidence:** response and device observations are converted into strict records; a contradiction produces `INCONCLUSIVE`.
+5. **Stored evidence to bundle verifier:** stored verdict labels are untrusted and recomputed from observations.
+6. **Manifest digest to external retention:** modification can be detected only when the root digest is retained separately from the bundle.
 
-All implemented and planned HTTP listeners must bind to localhost by default.
+All HTTP listeners bind to `127.0.0.1`. No implemented component sends requests to an external target.
 
-## Data flow
+## Reset and deterministic outcome
 
-1. The control plane selects a versioned case and confirms its package identity.
-2. It resets the device and confirms firmware `1.0.0`.
-3. It sends the untrusted package to the vulnerable gateway and records request, response, and device state.
-4. It resets and confirms the same initial state.
-5. It sends the exact same package bytes to the patched gateway and records the same evidence classes.
-6. It resets again and sends the trusted positive-control package to the patched gateway.
-7. The Phase 2 runner applies deterministic assertions to observed decisions, version transitions, package hashes, and execution completeness.
-8. A future verifier, evidence generator, and report generator will convert those observations into the Phase 3 evidence contract.
+Every scenario requires firmware `1.0.0`, update counter `0`, and no prior payload hash after reset. `PATCH_VERIFIED` requires the vulnerable unsafe transition, the patched rejection of identical request bytes, and the successful trusted positive control. Complete patch regressions produce `PATCH_NOT_VERIFIED`; missing, conflicting, or operationally affected observations produce `INCONCLUSIVE`.
 
-## Reset requirement
+## Evidence generation
 
-Every scenario must begin with an explicit reset followed by an observed firmware version of `1.0.0`. A missing or failed reset makes the affected execution `INCONCLUSIVE`. The vulnerable and patched executions must also record the same untrusted package SHA-256.
-
-## Deterministic verdict flow
-
-- Vulnerable: `ACCEPTED` plus `1.0.0 -> 9.9.0-test` produces `FAIL`.
-- Patched: `REJECTED` plus `1.0.0 -> 1.0.0` produces `PASS`.
-- Positive control: `ACCEPTED` plus `1.0.0 -> 1.1.0` produces `PASS`.
-- Only that exact complete combination produces `PATCH_VERIFIED`.
-- Complete contradictory observations produce `PATCH_NOT_VERIFIED`.
-- Missing, mismatched, or error observations produce `INCONCLUSIVE`.
-
-No probabilistic component participates in this flow.
-
-## Evidence generation flow
-
-Phase 2 generates only public keys, synthetic packages, and service logs under `.runtime/`; it does not generate the evidence bundle. A future generator will capture timestamps, build identifiers, package and signer identity, request and response metadata, device states, and raw synthetic artifacts. It will calculate SHA-256 values after each artifact is finalized, then list those separate files in the bundle manifest. The manifest will not include its own hash.
+JSON files use sorted keys, two-space indentation, UTF-8, and a final newline. Atomic writes use a temporary file in the destination directory, flush it, and replace the final path. The manifest excludes itself and its digest file to avoid circular hashing. `report.html` also does not embed the final root digest because the report is covered by the manifest.
 
 ## Architecture diagram
 
 ```mermaid
 flowchart LR
-    O[Operator] --> CP[Control plane and web interface\nplanned :8000]
-
-    subgraph Local synthetic test network
-        CP --> VG[Vulnerable OTA gateway\nimplemented :8101]
-        CP --> PG[Patched OTA gateway\nimplemented :8102]
-        VG --> D[Virtual IoT device\nimplemented :8200]
-        PG --> D
-    end
-
-    CP --> V[Deterministic verifier]
-    D --> V
-    V --> E[Evidence bundle generator]
-    E --> R[Human-readable report generator]
-    E --> B[(Hash-verified bundle files)]
-    R --> B
+    O[Operator] --> CLI[Verification CLI]
+    CLI --> ORCH[Verification orchestrator]
+    ORCH --> VG[Vulnerable gateway<br/>127.0.0.1:8101]
+    ORCH --> PG[Patched gateway<br/>127.0.0.1:8102]
+    VG --> D[Virtual device<br/>127.0.0.1:8200]
+    PG --> D
+    ORCH --> V[Pure verdict engine]
+    V --> E[Evidence generator]
+    E --> R[HTML report]
+    E --> M[Bundle manifest]
+    R --> M
+    M --> BV[Independent bundle verifier]
+    BV --> OUT[Tamper-evident evidence bundle]
 ```
 
-## Demonstration sequence
+## Verification sequence
 
 ```mermaid
 sequenceDiagram
     actor Operator
-    participant Control as Control plane
-    participant Device as Virtual device
-    participant Vulnerable as Vulnerable gateway
-    participant Patched as Patched gateway
-    participant Verifier as Deterministic verifier
-    participant Evidence as Evidence generator
+    participant Orchestrator
+    participant Device
+    participant Vulnerable
+    participant Patched
+    participant Verdicts
+    participant Bundle
 
-    Operator->>Control: Start fixed regression case
-    Control->>Device: Reset to 1.0.0
-    Device-->>Control: State confirms 1.0.0
-    Control->>Vulnerable: Send untrusted package
+    Operator->>Orchestrator: Run fixed verification case
+    Orchestrator->>Device: Reset and confirm 1.0.0
+    Orchestrator->>Vulnerable: Send untrusted package bytes
     Vulnerable->>Device: Apply 9.9.0-test
-    Device-->>Control: State is 9.9.0-test
-    Control->>Device: Reset to 1.0.0
-    Device-->>Control: State confirms 1.0.0
-    Control->>Patched: Replay identical untrusted package
-    Patched-->>Control: REJECTED
-    Device-->>Control: State remains 1.0.0
-    Control->>Device: Reset to 1.0.0
-    Device-->>Control: State confirms 1.0.0
-    Control->>Patched: Send trusted 1.1.0 package
+    Orchestrator->>Device: Read resulting state
+    Orchestrator->>Device: Reset and confirm 1.0.0
+    Orchestrator->>Patched: Replay identical untrusted bytes
+    Patched-->>Orchestrator: 403 UNTRUSTED_SIGNER
+    Orchestrator->>Device: Confirm state remains 1.0.0
+    Orchestrator->>Device: Reset and confirm 1.0.0
+    Orchestrator->>Patched: Send trusted package
     Patched->>Device: Apply 1.1.0
-    Device-->>Control: State is 1.1.0
-    Control->>Verifier: Submit recorded observations
-    Verifier-->>Control: PATCH_VERIFIED if all rules match
-    Control->>Evidence: Generate artifacts and hashes
-    Evidence-->>Operator: Bundle and readable report
+    Orchestrator->>Verdicts: Submit recorded observations
+    Verdicts-->>Orchestrator: PATCH_VERIFIED
+    Orchestrator->>Bundle: Generate, hash, verify, and publish
+    Bundle-->>Operator: Verified bundle and root digest
 ```

@@ -52,7 +52,7 @@ REQUIRED_REASON_CODES = {
     "DEVICE_UNAVAILABLE",
     "DEVICE_APPLY_FAILED",
 }
-PROHIBITED_KEY_SUFFIXES = {".pem", ".key", ".p12", ".pfx"}
+PROHIBITED_KEY_SUFFIXES = {".key", ".p12", ".pfx"}
 PROHIBITED_KEY_NAMES = {"id_" + "rsa", "id_" + "ed25519"}
 PRIVATE_PEM_HEADERS = tuple(
     "-----BEGIN " + prefix + "PRIVATE KEY-----"
@@ -254,14 +254,7 @@ def validate_readme(failures: list[str]) -> None:
         if phrase not in content:
             failures.append(f"README is missing implemented Phase 2 component: {phrase}")
 
-    planned = (
-        "Web dashboard",
-        "Deterministic verification orchestrator",
-        "Evidence bundle generation",
-        "Human-readable report generation",
-        "Docker Compose",
-        "GitHub Actions",
-    )
+    planned = ("Web dashboard", "Docker Compose", "GitHub Actions")
     planned_section = content.partition("## Not implemented yet")[2]
     if not planned_section:
         failures.append("README must contain a Not implemented yet section")

@@ -13,7 +13,7 @@ from fixrepro_core.models import DeviceApplyRequest, DeviceState
 from .state import VirtualDevice
 
 
-app = FastAPI(title="FixRepro Synthetic Device", version="0.2.0")
+app = FastAPI(title="FixRepro Synthetic Device", version="0.3.0")
 device = VirtualDevice()
 
 
