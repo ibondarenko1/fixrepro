@@ -174,6 +174,7 @@ def validate_port_locations(failures: list[str]) -> None:
     allowed_exact = {
         Path("fixrepro_core/config.py"),
         Path("scripts/run_phase2_demo.py"),
+        Path("scripts/validate_phase4.py"),
         Path("evidence/sample-evidence.json"),
     }
     for path in project_text_files():
@@ -254,14 +255,14 @@ def validate_readme(failures: list[str]) -> None:
         if phrase not in content:
             failures.append(f"README is missing implemented Phase 2 component: {phrase}")
 
-    planned = ("Web dashboard", "Docker Compose", "GitHub Actions")
+    planned = ("GitHub Actions",)
     planned_section = content.partition("## Not implemented yet")[2]
     if not planned_section:
         failures.append("README must contain a Not implemented yet section")
         return
     for phrase in planned:
         if phrase not in planned_section:
-            failures.append(f"README must mark Phase 3+ component as not implemented: {phrase}")
+            failures.append(f"README must mark future component as not implemented: {phrase}")
 
 
 def main() -> int:

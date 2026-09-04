@@ -1,16 +1,16 @@
-# Two-Minute Demonstration Flow
+# Two-Minute Judge Demonstration
 
-This is the implemented Phase 3 CLI demonstration. The final dashboard is not implemented.
+This is the implemented Phase 4 dashboard flow.
 
-| Time | Operator action | Required visible observation |
+| Time | Judge action | Required visible observation |
 |---:|---|---|
-| 0:00-0:10 | Run `python scripts/run_verification.py --output-dir evidence/demo-bundle --replace`. | The orchestrator starts all three services on localhost and generates fresh synthetic packages. |
-| 0:10-0:25 | Observe the vulnerable scenario in `evidence.json` or the report. | Reset state is `1.0.0`; the untrusted package is `ACCEPTED`; the device changes to `9.9.0-test`; verdict is `FAIL`. |
-| 0:25-0:40 | Observe the patched security scenario. | Reset state is `1.0.0`; the identical request body hash is `REJECTED`; the device stays at `1.0.0`; verdict is `PASS`. |
-| 0:40-0:55 | Observe the trusted positive control. | Reset state is `1.0.0`; the trusted package is `ACCEPTED`; the device changes to `1.1.0`; verdict is `PASS`. |
-| 0:55-1:10 | Read the CLI result. | `PATCH_VERIFIED`, the repository-relative bundle path, the full root digest, and `PHASE3_VERIFICATION_PASS` are printed. |
-| 1:10-1:25 | Open `evidence/demo-bundle/report.html` directly from disk. | The three visible result labels, same-input envelope hash, artifact list, safety scope, and limitations are readable. |
-| 1:25-1:45 | Run `python scripts/verify_bundle.py evidence/demo-bundle`. | The command checks the manifest, every file, schema, same-input hashes, package records, and recomputed verdicts. |
-| 1:45-2:00 | Compare the printed digest with `manifest.sha256`. | `BUNDLE_VERIFICATION_PASS` and the same root digest demonstrate modification detection when that digest is retained separately. |
+| 0:00-0:12 | Open `http://127.0.0.1:8000`. | The tracked bundle verifies automatically; `PATCH VERIFIED` and the three scenario cards are immediately visible. |
+| 0:12-0:28 | Scan the three cards. | Vulnerable accepts the untrusted update and changes to `9.9.0-test`; patched rejects the same input and stays at `1.0.0`; trusted control reaches `1.1.0`. |
+| 0:28-0:40 | Read **Exact same input replayed**. | The full envelope and request-body SHA-256 values match across the vulnerable and patched scenarios. |
+| 0:40-0:48 | Select **Run live verification**. | The UI reports only `Running deterministic verification…` and the generated job ID. No fake scenario progress appears. |
+| 0:48-1:15 | Wait for the fixed local lab. | One background job starts the existing orchestrator, executes all three scenarios, publishes a normal ignored bundle, and verifies it. |
+| 1:15-1:30 | Observe the completed result. | The source changes to `Live local verification`; the new verification ID, timestamp, hashes, digest, and three evidence-derived cards replace the demo. |
+| 1:30-1:45 | Open **Open report**. | The self-contained report opens through the fixed, reverified report route. |
+| 1:45-2:00 | Open the evidence, manifest, and digest links. | Only the four approved artifacts are available; the manifest digest supports independent tamper-evident verification. |
 
-If the vulnerable baseline does not reproduce, reset fails, package identity changes, an execution errors, or observations conflict, the result is `INCONCLUSIVE`. If the baseline reproduces and complete observations show that the patched behavior is absent, the result is `PATCH_NOT_VERIFIED`.
+The browser cannot provide a target, package, path, command, key, case, output directory, or replacement flag. `PATCH_NOT_VERIFIED` and `INCONCLUSIVE` remain completed deterministic outcomes; only an operational failure produces a failed job.

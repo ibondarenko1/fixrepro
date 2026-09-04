@@ -109,14 +109,14 @@ The future MVP is complete only when:
 
 ## Planned service ports
 
-| Component | Port | Status after Phase 2 |
+| Component | Port | Status after Phase 4 |
 |---|---:|---|
-| Control plane and final web dashboard | 8000 | Planned |
+| Control plane and judge-facing web dashboard | 8000 | Implemented for localhost demonstration |
 | Vulnerable OTA gateway | 8101 | Implemented for localhost demonstration |
 | Patched OTA gateway | 8102 | Implemented for localhost demonstration |
 | Virtual IoT device simulator | 8200 | Implemented for localhost demonstration |
 
-The deterministic orchestrator, verdict engine, evidence generator, HTML report generator, manifest generator, and independent bundle verifier are implemented internal components and do not require public ports.
+The deterministic orchestrator, verdict engine, evidence generator, HTML report generator, manifest generator, independent bundle verifier, and in-memory job manager are implemented internal components and do not require public ports.
 
 ## Phase 3 implemented components
 
@@ -128,14 +128,24 @@ The deterministic orchestrator, verdict engine, evidence generator, HTML report 
 - Tamper-evident manifest with a separate root digest
 - Independent bundle verification with verdict recomputation
 
-The final dashboard, Docker Compose environment, GitHub Actions workflow, submission screenshots, and demonstration video remain unimplemented.
+## Phase 4 implemented components
+
+- Judge-facing one-page dashboard and strict presentation models
+- Local control API with one fixed background verification action
+- Verified demo-bundle loading and live-run presentation
+- Internal bundle registry and safe artifact routes
+- Dashboard and report-specific security headers
+- Local dashboard and end-to-end smoke runners
+- One-container Dockerfile and Docker Compose topology
+
+GitHub Actions, cloud deployment, PDF export, AI features, submission screenshots, and demonstration video remain unimplemented.
 
 ## Future implementation phases
 
 1. **Phase 1 (complete):** repository scaffold, executable specification, cases, evidence contract, and documentation.
 2. **Phase 2 (complete):** synthetic virtual device, vulnerable and patched OTA gateways, in-memory signing identities, package generation, three-scenario runner, and deterministic unit tests.
 3. **Phase 3 (complete):** verifier, evidence-bundle generator, schema validation, HTML report, manifest, and independent bundle verification.
-4. **Phase 4:** control plane, plain web interface, Docker Compose integration, and end-to-end tests.
-5. **Phase 5:** GitHub Actions, demonstration hardening, accessibility review, and final presentation assets.
+4. **Phase 4 (complete):** control plane, plain web interface, Docker Compose launch path, and end-to-end smoke validation.
+5. **Phase 5:** GitHub Actions, deployment decisions, final accessibility review, screenshots, video, and submission assets.
 
-Phases 1 through 3 are represented as complete in this repository state. The final dashboard, container environment, continuous integration, and presentation assets remain future work.
+Phases 1 through 4 are represented as complete in this repository state. Continuous integration, cloud deployment, and final presentation assets remain future work.

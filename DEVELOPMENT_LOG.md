@@ -25,3 +25,14 @@
 - Generated the tracked demonstration at `evidence/demo-bundle` with bundle root digest `10fd80148896935b10fd1ccfd056e345d9a4537dff35473c4a025b9dbcab0204`.
 - No private key was persisted, and no external target was contacted.
 - Ports 8101, 8102, and 8200 were closed after testing.
+
+## 2026-09-03T23:53:36.3906859-07:00
+
+- Implemented Phase 4: the FastAPI application factory, strict presentation API, verified demo loading, one-worker in-memory job manager, background live verification, fixed artifact registry and routes, response security policies, accessible plain HTML/CSS/JavaScript dashboard, local runner, Dockerfile, Docker Compose topology, smoke runner, validator, and documentation.
+- Added 49 focused Phase 4 tests. The complete suite passed with 92 tests; two platform-dependent symlink tests were skipped because Windows did not permit their creation.
+- Passed `python scripts/validate_scaffold.py`, `python scripts/validate_phase2.py`, `python scripts/validate_phase3.py`, `python scripts/validate_phase4.py`, `python -m pytest -q`, `python -m compileall fixrepro_core device targets verifier app scripts`, `python scripts/run_phase2_demo.py --repeat 3`, `python scripts/run_verification.py --repeat 3`, `python scripts/verify_bundle.py evidence/demo-bundle`, and `python scripts/run_phase4_smoke.py` with the repository-local interpreter.
+- The local Phase 4 smoke and the Docker external-server smoke both produced `PHASE4_DASHBOARD_PASS` after a real background verification and checks of all four safe artifact routes.
+- Docker Compose configuration, image build, non-root runtime, container health, live verification, image private-key scan, host-loopback publication, and cleanup passed. Only host port `127.0.0.1:8000` was published.
+- Browser review confirmed automatic demo loading, `PATCH VERIFIED`, all three evidence-derived cards, a successful live run and source change, the HTML report, visible keyboard focus, no console errors, no external assets, no path disclosure, and no horizontal overflow at a 390-pixel viewport.
+- The tracked Phase 3 demo bundle was not regenerated or edited. Its root digest remained `10fd80148896935b10fd1ccfd056e345d9a4537dff35473c4a025b9dbcab0204`.
+- No private key was written, no external target was contacted, and ports 8000, 8101, 8102, and 8200 were closed after validation.

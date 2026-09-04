@@ -14,33 +14,35 @@ Security patches for connected systems are often accepted as code changes withou
 
 ## What it does
 
-FixRepro is a controlled security regression environment for a synthetic IoT OTA scenario. It runs an identical untrusted update package against vulnerable and patched gateways, observes virtual device state, and runs a trusted positive control. The deterministic verifier produces `PATCH_VERIFIED` only when unsafe behavior reproduces on the vulnerable build, is rejected by the patched build, and the legitimate update still succeeds.
+FixRepro is a controlled security regression environment for a synthetic IoT OTA scenario. Its local dashboard loads a verified demonstration bundle immediately and can start one real fixed verification. The workflow replays identical untrusted package bytes, records virtual device state, runs a trusted positive control, derives deterministic verdicts, and publishes a tamper-evident evidence bundle.
 
 ## How it works
 
-The runner resets the virtual device before every scenario. The vulnerable gateway models an integrity-only check, while the patched gateway also verifies an Ed25519 signature against a trusted public key. Each execution records build and case identifiers, payload and complete package hashes, signer identity, request and response hashes, device state, timestamps, decisions, verdicts, and artifacts. The workflow produces a schema-valid evidence document, self-contained HTML report, and tamper-evident manifest that can be checked independently.
+The vulnerable gateway checks payload integrity only. The patched gateway also verifies an Ed25519 signature against a trusted public key. Before every scenario, the orchestrator resets and confirms the device state. `PATCH_VERIFIED` requires the unsafe baseline, rejection of the same bytes by the patch, a successful trusted update, and no operational error.
+
+The dashboard never decides a verdict. It independently verifies a bundle, recomputes the outcome through the existing pure verdict engine, parses strict evidence, and returns a limited presentation model. Safe routes expose only the report, evidence, manifest, and digest for internally registered bundles.
 
 ## How it was built
 
-Phases 1 through 3 implement the repository contract, synthetic device and gateways, in-memory Ed25519 package generation, deterministic orchestration and verdicts, evidence generation, a self-contained report, bundle hashing, and independent verification. Unit and integration tests cover policy, outcomes, schema validation, output escaping, and bundle modification detection. The final dashboard and container environment are not implemented.
+Phases 1 through 4 implement the repository contract, synthetic device and gateways, in-memory Ed25519 package generation, deterministic orchestration, evidence and report generation, independent bundle verification, a FastAPI control plane, a plain HTML/CSS/JavaScript dashboard, an in-memory background job manager, and a one-container Docker Compose launch path.
 
-The current and planned stack is Python 3.12, FastAPI, Pydantic, the `cryptography` library with Ed25519, Docker Compose, pytest, plain HTML/CSS/JavaScript, JSON Schema, and GitHub Actions. Docker Compose, the final interface, and GitHub Actions remain planned.
+The stack is Python 3.12, FastAPI, Pydantic, `cryptography` with Ed25519, httpx, JSON Schema, pytest, plain HTML/CSS/JavaScript, and Docker Compose. GitHub Actions and cloud deployment are not implemented.
 
 ## Challenges
 
-The design must distinguish package integrity from signer trust, guarantee that the patched run receives the exact same unsafe bytes, reset state between scenarios, and avoid crediting a patch that blocks legitimate updates. It must also describe evidence accurately: file hashes make the bundle tamper-evident but do not establish an independent chain of custody.
+The design had to prove byte-for-byte replay, preserve a positive control, reset state between scenarios, prevent the browser from selecting arbitrary inputs, and avoid circular hashing in the evidence bundle. It also had to present evidence honestly: file hashes are tamper-evident only when the published digest is retained separately.
 
 ## Accomplishments
 
-FixRepro now executes the narrow security property end to end, proves exact same-input replay with complete package and request hashes, preserves the trusted positive control, and publishes a bundle whose root digest detects later file modification when retained separately.
+FixRepro now runs the fixed regression end to end from a local dashboard, keeps security decisions deterministic, provides immediate verified demo evidence, serializes live jobs, prevents arbitrary browser-controlled targets and paths, and reverifies every artifact before serving it.
 
 ## What was learned
 
-Patch verification needs more than a blocked request. A defensible regression result also needs identical input, controlled initial state, observable device consequences, build identity, and a positive control. Clear limitations are part of useful evidence.
+Patch verification needs identical input, controlled initial state, observable consequences, build identity, and a positive control. A presentation layer is safer when it consumes a narrow verified model instead of raw execution inputs.
 
 ## What is next
 
-The next phase will build the final local dashboard and container orchestration around the verified core. Later work will add continuous integration and presentation assets while preserving localhost-only defaults and synthetic data boundaries.
+Future work includes GitHub Actions, final presentation assets, and any separately reviewed deployment plan. Screenshots, video, cloud deployment, PDF export, and AI features are not part of Phase 4.
 
 ## Planned technologies
 

@@ -90,6 +90,8 @@ def expect_equal(
 
 def validate_required_files(failures: list[str]) -> None:
     for relative_path in REQUIRED_FILES:
+        if relative_path == "app/.gitkeep" and (ROOT / "app" / "__init__.py").is_file():
+            continue
         if not (ROOT / relative_path).is_file():
             failures.append(f"missing required file: {relative_path}")
 

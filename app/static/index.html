@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>FixRepro - Reproducible Security Patch Verification</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to verification result</a>
+  <header class="site-header">
+    <a class="wordmark" href="/" aria-label="FixRepro home">
+      <span class="wordmark-mark" aria-hidden="true">FR</span>
+      <span>FixRepro</span>
+    </a>
+    <p class="scope-chip"><span aria-hidden="true">●</span> Local synthetic lab</p>
+  </header>
+
+  <main id="main-content">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="eyebrow">Reproducible security patch verification</p>
+        <h1 id="hero-title">Prove the patch. Preserve the feature.</h1>
+        <p class="hero-summary">FixRepro replays the exact same security input against vulnerable and patched IoT builds, verifies that legitimate behavior still works, and publishes tamper-evident evidence.</p>
+        <div class="actions" aria-label="Verification actions">
+          <button class="button button-primary" type="button" id="run-verification" data-testid="run-verification">Run live verification</button>
+          <button class="button button-secondary" type="button" id="load-demo" data-testid="load-demo">Load verified demo</button>
+        </div>
+        <p class="action-note">One fixed localhost case. No uploads, targets, paths, or commands.</p>
+      </div>
+
+      <article class="outcome-panel" aria-labelledby="result-heading">
+        <div class="source-line">
+          <span>Evidence source</span>
+          <strong id="source-indicator" data-testid="source-indicator">Loading verified demo bundle</strong>
+        </div>
+        <div class="outcome-symbol" id="outcome-symbol" aria-hidden="true">…</div>
+        <p class="outcome-kicker">Deterministic outcome</p>
+        <h2 id="result-heading" class="outcome-heading" tabindex="-1">
+          <span id="overall-outcome" data-testid="overall-outcome">VERIFYING BUNDLE</span>
+        </h2>
+        <dl class="result-meta">
+          <div><dt>Verification ID</dt><dd id="verification-id">Pending</dd></div>
+          <div><dt>Created</dt><dd id="created-at">Pending</dd></div>
+        </dl>
+      </article>
+    </section>
+
+    <div class="status-region" id="live-status" data-testid="live-status" aria-live="polite" aria-atomic="true">
+      Loading the independently verified demonstration evidence.
+    </div>
+    <div class="error-region" id="error-message" data-testid="error-message" role="alert" hidden></div>
+
+    <section class="results-section" aria-labelledby="scenarios-heading">
+      <div class="section-heading-row">
+        <div>
+          <p class="eyebrow">Three required observations</p>
+          <h2 id="scenarios-heading">Security result at a glance</h2>
+        </div>
+        <p class="evidence-state" id="bundle-integrity-status"><span aria-hidden="true">…</span> Awaiting independently verified evidence</p>
+      </div>
+
+      <div class="scenario-grid" id="scenario-grid">
+        <article class="scenario-card scenario-unsafe" data-role="VULNERABLE" data-testid="vulnerable-card">
+          <p class="scenario-number">01 / Vulnerable baseline</p>
+          <p class="scenario-status"><span aria-hidden="true">…</span> <span data-field="visible_label">Waiting for verified evidence</span></p>
+          <div class="version-flow"><strong data-field="firmware_version_before">—</strong><span aria-hidden="true">→</span><strong data-field="firmware_version_after">—</strong></div>
+          <dl class="scenario-details">
+            <div><dt>Gateway</dt><dd data-field="observed_decision">Pending</dd></div>
+            <div><dt>Reason</dt><dd data-field="reason_code">Pending</dd></div>
+            <div><dt>Verdict</dt><dd data-field="security_verdict">Pending</dd></div>
+            <div><dt>Build</dt><dd data-field="build_id">Pending</dd></div>
+            <div><dt>Update count</dt><dd data-field="counter_transition">—</dd></div>
+          </dl>
+        </article>
+
+        <article class="scenario-card scenario-safe" data-role="PATCHED" data-testid="patched-card">
+          <p class="scenario-number">02 / Patched security test</p>
+          <p class="scenario-status"><span aria-hidden="true">…</span> <span data-field="visible_label">Waiting for verified evidence</span></p>
+          <div class="version-flow"><strong data-field="firmware_version_before">—</strong><span aria-hidden="true">→</span><strong data-field="firmware_version_after">—</strong></div>
+          <dl class="scenario-details">
+            <div><dt>Gateway</dt><dd data-field="observed_decision">Pending</dd></div>
+            <div><dt>Reason</dt><dd data-field="reason_code">Pending</dd></div>
+            <div><dt>Verdict</dt><dd data-field="security_verdict">Pending</dd></div>
+            <div><dt>Build</dt><dd data-field="build_id">Pending</dd></div>
+            <div><dt>Update count</dt><dd data-field="counter_transition">—</dd></div>
+          </dl>
+        </article>
+
+        <article class="scenario-card scenario-safe" data-role="POSITIVE_CONTROL" data-testid="positive-control-card">
+          <p class="scenario-number">03 / Trusted positive control</p>
+          <p class="scenario-status"><span aria-hidden="true">…</span> <span data-field="visible_label">Waiting for verified evidence</span></p>
+          <div class="version-flow"><strong data-field="firmware_version_before">—</strong><span aria-hidden="true">→</span><strong data-field="firmware_version_after">—</strong></div>
+          <dl class="scenario-details">
+            <div><dt>Gateway</dt><dd data-field="observed_decision">Pending</dd></div>
+            <div><dt>Reason</dt><dd data-field="reason_code">Pending</dd></div>
+            <div><dt>Verdict</dt><dd data-field="security_verdict">Pending</dd></div>
+            <div><dt>Build</dt><dd data-field="build_id">Pending</dd></div>
+            <div><dt>Update count</dt><dd data-field="counter_transition">—</dd></div>
+          </dl>
+        </article>
+      </div>
+    </section>
+
+    <section class="proof-grid" aria-label="Evidence proofs">
+      <article class="proof-panel proof-input">
+        <p class="eyebrow">Replay invariant</p>
+        <h2>Exact same input replayed</h2>
+        <p class="proof-verdict" id="same-input-status" data-testid="same-input-status"><span aria-hidden="true">…</span> Waiting for verified evidence</p>
+        <dl class="hash-list">
+          <div>
+            <dt>Full envelope SHA-256</dt>
+            <dd><code id="envelope-sha256" data-testid="envelope-sha256">Loading</code></dd>
+          </div>
+          <div>
+            <dt>Full request body SHA-256</dt>
+            <dd><code id="request-sha256" data-testid="request-sha256">Loading</code></dd>
+          </div>
+        </dl>
+      </article>
+
+      <article class="proof-panel proof-bundle">
+        <p class="eyebrow">Independent file verification</p>
+        <h2>Tamper-evident evidence bundle</h2>
+        <dl class="hash-list">
+          <div>
+            <dt>Bundle manifest SHA-256</dt>
+            <dd><code id="manifest-sha256" data-testid="manifest-sha256">Loading</code></dd>
+          </div>
+          <div class="compact-row">
+            <dt>Manifest entries</dt>
+            <dd id="manifest-entry-count">Loading</dd>
+          </div>
+        </dl>
+        <nav class="artifact-links" aria-label="Verified evidence artifacts">
+          <a id="report-link" data-testid="report-link" href="#">Open report</a>
+          <a id="evidence-link" data-testid="evidence-link" href="#">Evidence JSON</a>
+          <a id="manifest-link" data-testid="manifest-link" href="#">Manifest JSON</a>
+          <a id="digest-link" data-testid="digest-link" href="#">Manifest digest</a>
+        </nav>
+      </article>
+    </section>
+
+    <section class="property-section" aria-labelledby="property-heading">
+      <p class="eyebrow">Tested security property</p>
+      <h2 id="property-heading">Trusted signatures authorize updates</h2>
+      <p id="security-property">Loading the fixed signer-trust security property.</p>
+    </section>
+
+    <section class="how-section" aria-labelledby="how-heading">
+      <p class="eyebrow">Deterministic by design</p>
+      <h2 id="how-heading">How it works</h2>
+      <ol class="how-grid">
+        <li><span>01</span><strong>Reproduce the unsafe baseline.</strong></li>
+        <li><span>02</span><strong>Replay the exact same input against the patch.</strong></li>
+        <li><span>03</span><strong>Run a trusted positive control.</strong></li>
+        <li><span>04</span><strong>Verify and publish the evidence bundle.</strong></li>
+      </ol>
+    </section>
+
+    <section class="limitations" aria-labelledby="limitations-heading">
+      <div>
+        <p class="eyebrow">Narrow, defensible assurance</p>
+        <h2 id="limitations-heading">What this result proves</h2>
+      </div>
+      <div>
+        <p id="limitation-text">FixRepro proves only that the defined signer-trust regression behaved as recorded under the tested conditions. It does not prove that every vulnerability is fixed or that a build is generally secure.</p>
+        <p class="safety-text"><strong>Safety scope:</strong> <span id="safety-scope">Controlled synthetic IoT OTA verification on localhost.</span></p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p><strong>FixRepro</strong> · Synthetic localhost demonstration · Deterministic verdicts</p>
+  </footer>
+</body>
+</html>

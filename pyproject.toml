@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "fixrepro"
-version = "0.3.0"
+version = "0.4.0"
 description = "Controlled synthetic IoT OTA security regression lab"
 readme = "README.md"
 requires-python = ">=3.12"
@@ -28,7 +28,10 @@ dev = [
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["fixrepro_core*", "device*", "targets*", "verifier*"]
+include = ["fixrepro_core*", "device*", "targets*", "verifier*", "app*"]
+
+[tool.setuptools.package-data]
+app = ["static/*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

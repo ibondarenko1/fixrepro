@@ -174,7 +174,7 @@ def validate_readme(failures: list[str]) -> None:
         "HTML report",
         "Bundle verification",
     )
-    unimplemented = ("Web dashboard", "Docker Compose", "GitHub Actions")
+    unimplemented = ("GitHub Actions",)
     for phrase in implemented:
         if phrase not in content:
             failures.append(f"README is missing implemented Phase 3 feature: {phrase}")
