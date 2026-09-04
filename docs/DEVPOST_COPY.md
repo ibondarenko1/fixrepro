@@ -1,4 +1,6 @@
-# Devpost Draft Copy
+# Devpost Final Copy
+
+The canonical paste-ready text is [docs/submission/DEVPOST_FINAL.md](submission/DEVPOST_FINAL.md). The summary below matches the frozen Phase 5A product.
 
 ## Project name
 
@@ -26,7 +28,7 @@ The dashboard never decides a verdict. It independently verifies a bundle, recom
 
 Phases 1 through 4 implement the repository contract, synthetic device and gateways, in-memory Ed25519 package generation, deterministic orchestration, evidence and report generation, independent bundle verification, a FastAPI control plane, a plain HTML/CSS/JavaScript dashboard, an in-memory background job manager, and a one-container Docker Compose launch path.
 
-The stack is Python 3.12, FastAPI, Pydantic, `cryptography` with Ed25519, httpx, JSON Schema, pytest, plain HTML/CSS/JavaScript, and Docker Compose. GitHub Actions and cloud deployment are not implemented.
+The stack is Python 3.12, FastAPI, Pydantic, `cryptography` with Ed25519, HTTPX, JSON Schema, pytest, plain HTML/CSS/JavaScript, Docker Compose, and GitHub Actions. No cloud deployment is provided.
 
 ## Challenges
 
@@ -42,18 +44,21 @@ Patch verification needs identical input, controlled initial state, observable c
 
 ## What is next
 
-Future work includes GitHub Actions, final presentation assets, and any separately reviewed deployment plan. Screenshots, video, cloud deployment, PDF export, and AI features are not part of Phase 4.
+The remaining submission work is manual: record and upload the video, enter the prepared text and images in Devpost, preview the entry, and submit it. No cloud deployment is provided.
 
-## Planned technologies
+## Built with
 
 - Python 3.12
 - FastAPI
 - Pydantic
-- `cryptography` with Ed25519
-- Docker Compose
+- Ed25519 through `cryptography`
+- HTTPX
+- JSON Schema Draft 2020-12
 - pytest
 - Plain HTML, CSS, and JavaScript
-- JSON Schema
+- Docker and Docker Compose
 - GitHub Actions
+
+The final video has not been recorded, and Devpost entry remains manual.
 
 The repository, demonstration environment, evidence format, interface, and automation are new VoltHacks 2026 development. General methodology is informed by prior security research.

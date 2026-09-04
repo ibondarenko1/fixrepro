@@ -36,3 +36,14 @@
 - Browser review confirmed automatic demo loading, `PATCH VERIFIED`, all three evidence-derived cards, a successful live run and source change, the HTML report, visible keyboard focus, no console errors, no external assets, no path disclosure, and no horizontal overflow at a 390-pixel viewport.
 - The tracked Phase 3 demo bundle was not regenerated or edited. Its root digest remained `10fd80148896935b10fd1ccfd056e345d9a4537dff35473c4a025b9dbcab0204`.
 - No private key was written, no external target was contacted, and ports 8000, 8101, 8102, and 8200 were closed after validation.
+
+## 2026-09-04T09:32:11.8182270-07:00
+
+- Froze the Phase 4 product behavior for Phase 5A and added submission preparation only: the read-only GitHub Actions workflow, final Devpost metadata and copy, generated screenshots, video script, timed shot list, matching SRT captions, judge Q&A, submission checklist, and Phase 5 validator.
+- Generated four public PNG screenshots from the real localhost application with the standard-library capture script. It verified the tracked demo and rendered DOM before capture; visual review confirmed the result labels, three scenario cards, evidence section, report content, responsive mobile layout, and absence of personal or local-path data.
+- Passed all five repository validators, 92 pytest tests with two platform-dependent symlink skips, compileall, one Phase 2 demonstration, one Phase 3 verification, independent tracked-bundle verification, and the local Phase 4 dashboard smoke test.
+- Passed Docker Compose configuration, image build, non-root container health, host-loopback publication, external-server smoke testing, log review, and container cleanup. Only `127.0.0.1:8000` was published.
+- Remote GitHub Actions verification is pending the Phase 5A commit and push; the completed run will be recorded after GitHub reports its final state.
+- The tracked demo-bundle root digest remained `10fd80148896935b10fd1ccfd056e345d9a4537dff35473c4a025b9dbcab0204`, and no file under `evidence/demo-bundle` changed.
+- Product behavior, deterministic verdict logic, the evidence schema, browser input boundaries, and Docker topology were not expanded. No private key was written and no external test target was contacted.
+- Video recording, video upload, Devpost form entry, and Devpost submission remain manual work.

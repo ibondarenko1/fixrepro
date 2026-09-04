@@ -174,14 +174,11 @@ def validate_readme(failures: list[str]) -> None:
         "HTML report",
         "Bundle verification",
     )
-    unimplemented = ("GitHub Actions",)
     for phrase in implemented:
         if phrase not in content:
             failures.append(f"README is missing implemented Phase 3 feature: {phrase}")
-    planned = content.partition("## Not implemented yet")[2]
-    for phrase in unimplemented:
-        if phrase not in planned:
-            failures.append(f"README must keep unimplemented feature in the planned section: {phrase}")
+    if "Remaining outside the repository" not in content:
+        failures.append("README must distinguish remaining manual submission work")
 
 
 def main() -> int:

@@ -102,7 +102,7 @@ The future MVP is complete only when:
 - General vulnerability discovery or exploit development
 - Remote targeting, internet scanning, or deployment to real devices
 - A claim that every vulnerability is fixed
-- A claim that evidence is tamper-proof
+- A claim that the evidence cannot be altered
 - Autonomous or probabilistic security verdicts
 - Production-grade key management, fleet management, or OTA deployment
 - Organization-specific branding unrelated to FixRepro
@@ -138,14 +138,20 @@ The deterministic orchestrator, verdict engine, evidence generator, HTML report 
 - Local dashboard and end-to-end smoke runners
 - One-container Dockerfile and Docker Compose topology
 
-GitHub Actions, cloud deployment, PDF export, AI features, submission screenshots, and demonstration video remain unimplemented.
+Cloud deployment, PDF export, AI features, and demonstration video remain unimplemented. Phase 5A adds continuous integration and submission screenshots without changing the product.
 
-## Future implementation phases
+## Submission freeze
+
+The core implementation is frozen for the VoltHacks submission. Phase 5A adds continuous integration and presentation material only. Device behavior, gateway policies, package and signing contracts, scenario transitions, verdict rules, evidence schema, bundle verification, dashboard routes, job behavior, artifact rules, Docker topology, and the tracked demo bundle remain unchanged.
+
+Video recording, video upload, Devpost form entry, and Devpost submission are manual work outside this repository.
+
+## Implementation phases
 
 1. **Phase 1 (complete):** repository scaffold, executable specification, cases, evidence contract, and documentation.
 2. **Phase 2 (complete):** synthetic virtual device, vulnerable and patched OTA gateways, in-memory signing identities, package generation, three-scenario runner, and deterministic unit tests.
 3. **Phase 3 (complete):** verifier, evidence-bundle generator, schema validation, HTML report, manifest, and independent bundle verification.
 4. **Phase 4 (complete):** control plane, plain web interface, Docker Compose launch path, and end-to-end smoke validation.
-5. **Phase 5:** GitHub Actions, deployment decisions, final accessibility review, screenshots, video, and submission assets.
+5. **Phase 5A (complete after validation):** GitHub Actions, final metadata, generated screenshots, video instructions, captions, judge notes, and submission checklist.
 
-Phases 1 through 4 are represented as complete in this repository state. Continuous integration, cloud deployment, and final presentation assets remain future work.
+Phases 1 through 4 contain the product implementation. Phase 5A is release and submission preparation only. It adds no cloud deployment and does not claim that a video was recorded or that a Devpost entry was submitted.

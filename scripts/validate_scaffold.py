@@ -42,18 +42,6 @@ REQUIRED_FILES = (
     "devpost/overview.json",
 )
 
-EXPECTED_TECHNOLOGIES = [
-    "Python 3.12",
-    "FastAPI",
-    "Pydantic",
-    "cryptography library with Ed25519",
-    "Docker Compose",
-    "pytest",
-    "Plain HTML, CSS, and JavaScript",
-    "JSON Schema",
-    "GitHub Actions",
-]
-
 SHA256_RE = re.compile(r"^[a-f0-9]{64}$")
 PRIVATE_KEY_SUFFIXES = {".key", ".p12", ".pfx"}
 PRIVATE_KEY_NAMES = {"id_" + "rsa", "id_" + "ed25519"}
@@ -162,19 +150,13 @@ def validate_devpost(failures: list[str]) -> None:
             failures.append(f"devpost {field}: {len(value)} characters exceeds {limit}")
 
     expect_equal(failures, "devpost project_name", overview.get("project_name"), "FixRepro")
-    expect_equal(failures, "devpost submission_status", overview.get("submission_status"), "draft")
-    expect_equal(
-        failures,
-        "devpost implementation_status",
-        overview.get("implementation_status"),
-        "phase_1_scaffold",
-    )
-    expect_equal(
-        failures,
-        "devpost technologies_planned",
-        overview.get("technologies_planned"),
-        EXPECTED_TECHNOLOGIES,
-    )
+    if overview.get("submission_status") not in {"draft", "ready_for_manual_devpost_entry"}:
+        failures.append("devpost submission_status must not claim an actual submission")
+    implementation_status = overview.get("implementation_status")
+    if implementation_status not in {"phase_1_scaffold", "phase_5a_submission_package"}:
+        failures.append("devpost implementation_status is not a recognized repository phase")
+    if implementation_status == "phase_5a_submission_package":
+        expect_equal(failures, "devpost technologies_planned", overview.get("technologies_planned"), [])
 
 
 def validate_schema(failures: list[str]) -> None:

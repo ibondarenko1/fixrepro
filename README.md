@@ -2,6 +2,28 @@
 
 FixRepro replays the same security test against vulnerable and patched robotics or IoT builds, captures hash-verified evidence, and proves the fix without breaking legitimate behavior.
 
+[![CI](https://github.com/ibondarenko1/fixrepro/actions/workflows/ci.yml/badge.svg)](https://github.com/ibondarenko1/fixrepro/actions/workflows/ci.yml)
+
+![FixRepro dashboard showing PATCH VERIFIED and the three required scenarios](docs/submission/screenshots/01-dashboard-overview.png)
+
+*The verified demo shows the unsafe baseline, rejection of the exact same input, and a successful trusted positive control.*
+
+## Why FixRepro
+
+A patch is not proven by a code change alone. FixRepro replays the exact same unsafe input before and after the patch, confirms that legitimate behavior still works, and publishes independently verifiable, tamper-evident evidence.
+
+## Quick start
+
+```bash
+git clone https://github.com/ibondarenko1/fixrepro.git
+cd fixrepro
+docker compose up --build
+```
+
+Open `http://127.0.0.1:8000`.
+
+[Verified demo report](evidence/demo-bundle/report.html) · [Evidence JSON](evidence/demo-bundle/evidence.json) · [Architecture](docs/ARCHITECTURE.md) · [Submission screenshots](docs/submission/SCREENSHOTS.md)
+
 ## Problem
 
 Security patches for connected systems are often accepted as code changes without repeatable proof that unsafe behavior is gone and legitimate behavior still works.
@@ -110,7 +132,7 @@ evidence/demo-bundle/
 
 `manifest.json` covers every final bundle file except itself and `manifest.sha256`. The separate SHA-256 in `manifest.sha256` is the bundle root digest. The dashboard creates its safe artifact URLs at presentation time and does not modify the bundle.
 
-The bundle is tamper-evident when its published manifest digest is retained separately. It is not tamper-proof and is not a substitute for an externally trusted signature or independent laboratory validation.
+The bundle is tamper-evident when its published manifest digest is retained separately. This does not replace an externally trusted signature or independent laboratory validation.
 
 ## Safety boundaries
 
@@ -128,7 +150,7 @@ The repository, demonstration environment, evidence format, interface, and autom
 
 ## Current status
 
-Phase 4 is implemented locally on top of the Phase 1 through Phase 3 deterministic verification core.
+Phase 5A freezes the implemented product for VoltHacks submission preparation. Core behavior, verdict logic, evidence schema, and the tracked demonstration bundle are unchanged from Phase 4.
 
 Implemented now:
 
@@ -149,13 +171,12 @@ Implemented now:
 - Safe artifact serving
 - Dockerfile and Docker Compose
 - Phase 4 smoke validation
+- GitHub Actions continuous integration
+- Submission screenshots captured from the running application
 
-## Not implemented yet
+## Remaining outside the repository
 
-- GitHub Actions
-- Cloud deployment
-- PDF export
-- AI features
-- Final screenshots
-- Demonstration video
+- Final video recording
+- Video upload
+- Devpost form entry
 - Devpost submission

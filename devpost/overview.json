@@ -2,17 +2,32 @@
   "project_name": "FixRepro",
   "elevator_pitch": "Replays the same security test against vulnerable and patched robotics or IoT builds, captures hash-verified evidence, and proves the fix without breaking legitimate behavior.",
   "problem_statement": "Security patches for connected systems are often accepted as code changes without repeatable proof that unsafe behavior is gone and legitimate behavior still works.",
-  "submission_status": "draft",
-  "implementation_status": "phase_1_scaffold",
-  "technologies_planned": [
+  "submission_status": "ready_for_manual_devpost_entry",
+  "implementation_status": "phase_5a_submission_package",
+  "technologies_planned": [],
+  "technologies_used": [
     "Python 3.12",
     "FastAPI",
     "Pydantic",
-    "cryptography library with Ed25519",
-    "Docker Compose",
+    "Ed25519",
+    "cryptography",
+    "HTTPX",
+    "JSON Schema Draft 2020-12",
     "pytest",
-    "Plain HTML, CSS, and JavaScript",
-    "JSON Schema",
+    "Plain HTML",
+    "CSS",
+    "JavaScript",
+    "Docker",
+    "Docker Compose",
     "GitHub Actions"
+  ],
+  "repository_url": "https://github.com/ibondarenko1/fixrepro",
+  "team_mode": "solo",
+  "video_status": "script_ready_recording_pending",
+  "screenshot_files": [
+    "docs/submission/screenshots/01-dashboard-overview.png",
+    "docs/submission/screenshots/02-dashboard-full.png",
+    "docs/submission/screenshots/03-verification-report.png",
+    "docs/submission/screenshots/04-mobile-dashboard.png"
   ]
 }

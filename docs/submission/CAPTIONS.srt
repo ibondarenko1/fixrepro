@@ -1,0 +1,91 @@
+1
+00:00:00,000 --> 00:00:06,000
+A code change does not prove
+that a security patch works.
+
+2
+00:00:06,000 --> 00:00:12,000
+I built FixRepro for one repeatable
+security regression.
+
+3
+00:00:12,000 --> 00:00:20,000
+This is a controlled synthetic IoT lab
+for an over-the-air software update.
+
+4
+00:00:20,000 --> 00:00:30,000
+First, the device starts at version 1.0.0.
+The vulnerable gateway checks integrity but ignores signer trust.
+
+5
+00:00:30,000 --> 00:00:40,000
+It accepts an untrusted signed update,
+and the device changes to 9.9.0-test.
+
+6
+00:00:40,000 --> 00:00:43,000
+Unsafe behavior reproduced.
+
+7
+00:00:43,000 --> 00:00:53,000
+Next, FixRepro resets and replays the exact same
+bytes against the patched gateway.
+
+8
+00:00:53,000 --> 00:01:01,000
+Digital-signature verification rejects the signer.
+The device stays at 1.0.0.
+
+9
+00:01:01,000 --> 00:01:10,000
+Blocking everything would be a bad patch,
+so FixRepro runs a positive control.
+
+10
+00:01:10,000 --> 00:01:19,000
+A trusted update succeeds, and the device reaches 1.1.0.
+Legitimate behavior is preserved.
+
+11
+00:01:19,000 --> 00:01:27,000
+The matching hashes prove that both tests
+used identical input.
+
+12
+00:01:27,000 --> 00:01:36,000
+FixRepro records responses and device transitions,
+then creates a tamper-evident evidence bundle.
+
+13
+00:01:36,000 --> 00:01:45,000
+And an independent command checks each file
+and recomputes the deterministic verdict.
+
+14
+00:01:45,000 --> 00:01:49,000
+No language model decides it.
+
+15
+00:01:49,000 --> 00:01:58,000
+From the dashboard, I can load the verified demo
+or start a local run.
+
+16
+00:01:58,000 --> 00:02:03,000
+The browser cannot select another target or package.
+
+17
+00:02:03,000 --> 00:02:11,000
+The same method could fit authorized robotics, smart devices,
+industrial IoT, and connected-system release pipelines.
+
+18
+00:02:11,000 --> 00:02:15,000
+PATCH_VERIFIED applies only to this regression
+under these test conditions.
+
+19
+00:02:15,000 --> 00:02:20,000
+FixRepro turns a security fix into a repeatable,
+reviewable result instead of an unsupported claim.

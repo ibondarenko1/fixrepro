@@ -1,0 +1,41 @@
+{
+  "accomplishments": "I built a complete local verification path: three synthetic services, strict package validation, deterministic orchestration, a positive control, a tamper-evident bundle, independent bundle checking, a judge-facing dashboard, Docker packaging, tests, and continuous integration.",
+  "challenges": "The hardest parts were proving byte-for-byte replay, resetting state before every scenario, avoiding circular hashes in the evidence bundle, and keeping the browser unable to select targets, packages, keys, commands, or output paths.",
+  "development_declaration": "The repository, synthetic lab, evidence format, dashboard, and automation are new VoltHacks 2026 work. The general method is informed by prior security research.",
+  "how_it_works": "A vulnerable gateway accepts an integrity-valid update from an untrusted signer. The patched gateway receives the exact same package bytes and rejects them through Ed25519 digital-signature verification. A trusted positive control must still update the device. Pure rules calculate the verdict from recorded observations, and an independent command checks every bundle file against its manifest.",
+  "how_we_built_it": "I used Python 3.12, FastAPI, Pydantic, cryptography, HTTPX, JSON Schema, pytest, plain HTML, CSS, JavaScript, Docker, Docker Compose, and GitHub Actions. Private signing keys are created in memory for each run and are never written to disk.",
+  "image_files": [
+    "docs/submission/screenshots/01-dashboard-overview.png",
+    "docs/submission/screenshots/02-dashboard-full.png",
+    "docs/submission/screenshots/03-verification-report.png",
+    "docs/submission/screenshots/04-mobile-dashboard.png"
+  ],
+  "inspiration": "A code change does not prove that a security patch works. Connected-system teams need a repeatable check that the unsafe behavior is gone and the legitimate feature still works.",
+  "limitation_statement": "PATCH_VERIFIED applies only to the defined signer-trust regression under the recorded test conditions. It does not prove that every vulnerability is fixed or that a build is generally secure.",
+  "problem": "Security patches for connected systems are often accepted as code changes without repeatable proof that unsafe behavior is gone and legitimate behavior still works.",
+  "project_name": "FixRepro",
+  "repository_url": "https://github.com/ibondarenko1/fixrepro",
+  "safety_statement": "FixRepro uses a synthetic localhost lab. The browser cannot provide an arbitrary target or test input, no LLM decides a verdict, and the Docker host publishes only the dashboard on 127.0.0.1.",
+  "tagline": "Prove the patch. Preserve the feature.",
+  "technologies_used": [
+    "Python 3.12",
+    "FastAPI",
+    "Pydantic",
+    "Ed25519",
+    "cryptography",
+    "HTTPX",
+    "JSON Schema Draft 2020-12",
+    "pytest",
+    "Plain HTML",
+    "CSS",
+    "JavaScript",
+    "Docker",
+    "Docker Compose",
+    "GitHub Actions"
+  ],
+  "try_it_out": "Clone https://github.com/ibondarenko1/fixrepro, run docker compose up --build, then open http://127.0.0.1:8000. A repository-local Python setup is documented in README.md.",
+  "video_status": "script_ready_recording_pending",
+  "what_it_does": "FixRepro runs one controlled over-the-air software update regression against synthetic vulnerable and patched IoT builds. It replays identical unsafe input, confirms a trusted update still succeeds, records the device transitions, and publishes evidence that can be checked independently.",
+  "what_we_learned": "A useful patch test needs the same input, a confirmed initial state, observable behavior, stable build identities, and a positive control. A file hash is meaningful only when the root digest is retained separately.",
+  "whats_next": "The next step is to add adapters for authorized robotics, smart-device, industrial IoT, and connected-system release labs while preserving the same narrow, deterministic evidence contract. Video recording and Devpost entry remain manual submission tasks."
+}

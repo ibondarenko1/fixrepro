@@ -265,9 +265,6 @@ def validate_docker(failures: list[str]) -> None:
 
 
 def validate_safety(failures: list[str]) -> None:
-    workflows = ROOT / ".github" / "workflows"
-    if workflows.is_dir() and any(path.is_file() for path in workflows.rglob("*")):
-        failures.append("GitHub Actions workflows are prohibited in Phase 4")
     for path in project_files():
         relative = path.relative_to(ROOT)
         if path.suffix.casefold() in PRIVATE_SUFFIXES:
@@ -301,10 +298,10 @@ def validate_readme(failures: list[str]) -> None:
     for phrase in implemented:
         if phrase not in content:
             failures.append(f"README is missing implemented Phase 4 feature: {phrase}")
-    remaining = content.partition("## Not implemented yet")[2]
-    for phrase in ("GitHub Actions", "Cloud deployment", "PDF export", "AI features"):
+    remaining = content.partition("## Remaining outside the repository")[2]
+    for phrase in ("Final video recording", "Video upload", "Devpost form entry", "Devpost submission"):
         if phrase not in remaining:
-            failures.append(f"README must keep remaining work unimplemented: {phrase}")
+            failures.append(f"README must identify remaining manual work: {phrase}")
 
 
 def main() -> int:
