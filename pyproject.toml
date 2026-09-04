@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=75,<81"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fixrepro"
+version = "0.2.0"
+description = "Controlled synthetic IoT OTA security regression lab"
+readme = "README.md"
+requires-python = ">=3.12"
+license = { file = "LICENSE" }
+authors = [
+  { name = "Ievgen Bondarenko" }
+]
+dependencies = [
+  "fastapi>=0.115,<1.0",
+  "uvicorn>=0.30,<1.0",
+  "pydantic>=2.9,<3.0",
+  "cryptography>=43,<48",
+  "httpx>=0.27,<1.0"
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8,<10"
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["fixrepro_core*", "device*", "targets*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"

@@ -1,18 +1,18 @@
-# Planned Architecture
+# Architecture
 
-All components in this document are planned. Phase 1 defines their contracts but does not implement them.
+Phase 2 implements the three localhost OTA lab services, shared package and policy logic, runtime artifact generation, and the demonstration runner. The control plane, web interface, standalone verification orchestrator, evidence bundle, and report generator remain planned.
 
 ## Component responsibilities
 
-| Component | Planned responsibility | Planned port |
-|---|---|---:|
-| Control plane and web interface | Orchestrate resets and executions, display deterministic results, and expose evidence downloads | 8000 |
-| Vulnerable OTA gateway | Model the unsafe integrity-only acceptance behavior | 8101 |
-| Patched OTA gateway | Enforce package integrity and Ed25519 signer trust | 8102 |
-| Virtual IoT device simulator | Hold synthetic firmware state and apply authorized version changes | 8200 |
-| Deterministic verifier | Derive individual verdicts and the overall outcome from recorded observations | Internal |
-| Evidence bundle generator | Write execution records, artifact manifests, and SHA-256 values | Internal |
-| Report generator | Produce a human-readable summary from the verified evidence | Internal |
+| Component | Responsibility | Port | Status |
+|---|---|---:|---|
+| Control plane and web interface | Orchestrate resets and executions, display deterministic results, and expose evidence downloads | 8000 | Planned |
+| Vulnerable OTA gateway | Model the unsafe integrity-only acceptance behavior | 8101 | Implemented |
+| Patched OTA gateway | Enforce package integrity and Ed25519 signer trust | 8102 | Implemented |
+| Virtual IoT device simulator | Hold synthetic firmware state and apply authorized version changes | 8200 | Implemented |
+| Deterministic verifier | Derive individual verdicts and the overall outcome from recorded observations | Internal | Planned; Phase 2 runner uses fixed assertions only |
+| Evidence bundle generator | Write execution records, artifact manifests, and SHA-256 values | Internal | Planned |
+| Report generator | Produce a human-readable summary from the verified evidence | Internal | Planned |
 
 ## Trust boundaries
 
@@ -22,9 +22,9 @@ All components in this document are planned. Phase 1 defines their contracts but
 4. **Runtime to verifier:** observations are inputs; the verifier must not trust service-reported verdicts.
 5. **Verifier to evidence storage:** hashes can reveal later modification but cannot prevent replacement by an actor who controls both evidence and reference hashes.
 
-All planned HTTP listeners must bind to localhost by default.
+All implemented and planned HTTP listeners must bind to localhost by default.
 
-## Planned data flow
+## Data flow
 
 1. The control plane selects a versioned case and confirms its package identity.
 2. It resets the device and confirms firmware `1.0.0`.
@@ -32,8 +32,8 @@ All planned HTTP listeners must bind to localhost by default.
 4. It resets and confirms the same initial state.
 5. It sends the exact same package bytes to the patched gateway and records the same evidence classes.
 6. It resets again and sends the trusted positive-control package to the patched gateway.
-7. The verifier derives all verdicts from observed decisions, version transitions, package hashes, and execution completeness.
-8. The evidence and report generators write separate artifacts and a bundle manifest.
+7. The Phase 2 runner applies deterministic assertions to observed decisions, version transitions, package hashes, and execution completeness.
+8. A future verifier, evidence generator, and report generator will convert those observations into the Phase 3 evidence contract.
 
 ## Reset requirement
 
@@ -52,7 +52,7 @@ No probabilistic component participates in this flow.
 
 ## Evidence generation flow
 
-The future runner will capture timestamps, build identifiers, package and signer identity, request and response metadata, device states, and raw synthetic artifacts. The generator will calculate SHA-256 values after each artifact is finalized, then list those separate files in the bundle manifest. The manifest will not include its own hash. A human-readable report will be derived from the same observations and will use the term hash-verified or tamper-evident evidence.
+Phase 2 generates only public keys, synthetic packages, and service logs under `.runtime/`; it does not generate the evidence bundle. A future generator will capture timestamps, build identifiers, package and signer identity, request and response metadata, device states, and raw synthetic artifacts. It will calculate SHA-256 values after each artifact is finalized, then list those separate files in the bundle manifest. The manifest will not include its own hash.
 
 ## Architecture diagram
 
@@ -61,9 +61,9 @@ flowchart LR
     O[Operator] --> CP[Control plane and web interface\nplanned :8000]
 
     subgraph Local synthetic test network
-        CP --> VG[Vulnerable OTA gateway\nplanned :8101]
-        CP --> PG[Patched OTA gateway\nplanned :8102]
-        VG --> D[Virtual IoT device\nplanned :8200]
+        CP --> VG[Vulnerable OTA gateway\nimplemented :8101]
+        CP --> PG[Patched OTA gateway\nimplemented :8102]
+        VG --> D[Virtual IoT device\nimplemented :8200]
         PG --> D
     end
 

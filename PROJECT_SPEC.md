@@ -108,21 +108,21 @@ The future MVP is complete only when:
 
 ## Planned service ports
 
-| Planned component | Port |
-|---|---:|
-| Control plane and web interface | 8000 |
-| Vulnerable OTA gateway | 8101 |
-| Patched OTA gateway | 8102 |
-| Virtual IoT device simulator | 8200 |
+| Component | Port | Status after Phase 2 |
+|---|---:|---|
+| Control plane and web interface | 8000 | Planned |
+| Vulnerable OTA gateway | 8101 | Implemented for localhost demonstration |
+| Patched OTA gateway | 8102 | Implemented for localhost demonstration |
+| Virtual IoT device simulator | 8200 | Implemented for localhost demonstration |
 
 The deterministic verifier, evidence generator, and report generator are planned internal components and do not require public ports.
 
 ## Future implementation phases
 
-1. **Phase 1:** repository scaffold, executable specification, cases, evidence contract, and documentation.
-2. **Phase 2:** synthetic virtual device and OTA gateway behavior with deterministic unit tests.
+1. **Phase 1 (complete):** repository scaffold, executable specification, cases, evidence contract, and documentation.
+2. **Phase 2 (complete):** synthetic virtual device, vulnerable and patched OTA gateways, in-memory signing identities, package generation, three-scenario runner, and deterministic unit tests.
 3. **Phase 3:** verifier, evidence-bundle generator, schema validation, and report generator.
 4. **Phase 4:** control plane, plain web interface, Docker Compose integration, and end-to-end tests.
 5. **Phase 5:** GitHub Actions, demonstration hardening, accessibility review, and final presentation assets.
 
-Only Phase 1 is represented as complete in this repository state.
+Phases 1 and 2 are represented as complete in this repository state. The complete product and its Phase 3 through Phase 5 components are not implemented.

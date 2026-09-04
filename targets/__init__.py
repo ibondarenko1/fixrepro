@@ -1,0 +1,1 @@
+"""Synthetic OTA gateway targets."""

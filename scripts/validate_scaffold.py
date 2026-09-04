@@ -96,8 +96,9 @@ def validate_required_files(failures: list[str]) -> None:
 
 def validate_all_json(failures: list[str]) -> int:
     count = 0
+    ignored_parts = {".git", ".venv", ".runtime", "__pycache__"}
     for path in sorted(ROOT.rglob("*.json")):
-        if ".git" in path.parts:
+        if any(part in ignored_parts or part.endswith(".egg-info") for part in path.parts):
             continue
         count += 1
         try:

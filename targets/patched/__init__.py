@@ -1,0 +1,1 @@
+"""Patched synthetic OTA target."""
