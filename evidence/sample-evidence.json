@@ -1,0 +1,168 @@
+{
+  "schema_version": "1.0.0",
+  "verification_id": "SYNTHETIC-VERIFY-001",
+  "created_at": "2026-09-04T03:00:00Z",
+  "test_case": {
+    "case_id": "OTA-UNTRUSTED-SIGNER-001",
+    "title": "Synthetic untrusted OTA signer regression",
+    "security_property": "An OTA gateway must accept an update only when package integrity is valid and the Ed25519 signature verifies against the configured trusted public key.",
+    "positive_control_case_id": "OTA-TRUSTED-SIGNER-001"
+  },
+  "executions": [
+    {
+      "execution_id": "SYNTHETIC-EXEC-VULNERABLE-001",
+      "role": "VULNERABLE",
+      "build_id": "synthetic-vulnerable-build-1",
+      "started_at": "2026-09-04T03:00:01Z",
+      "finished_at": "2026-09-04T03:00:02Z",
+      "package": {
+        "filename": "synthetic-untrusted-9.9.0-test.ota",
+        "sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+        "signer_fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "signer_trust": "UNTRUSTED"
+      },
+      "request": {
+        "method": "POST",
+        "target": "http://127.0.0.1:8101/update",
+        "content_type": "application/octet-stream",
+        "body_sha256": "1111111111111111111111111111111111111111111111111111111111111111"
+      },
+      "response": {
+        "status_code": 200,
+        "content_type": "application/json",
+        "body_sha256": "2222222222222222222222222222222222222222222222222222222222222222"
+      },
+      "device_state_before": {
+        "device_id": "synthetic-device-001",
+        "firmware_version": "1.0.0",
+        "state_sha256": "3333333333333333333333333333333333333333333333333333333333333333"
+      },
+      "device_state_after": {
+        "device_id": "synthetic-device-001",
+        "firmware_version": "9.9.0-test",
+        "state_sha256": "4444444444444444444444444444444444444444444444444444444444444444"
+      },
+      "secure_expected_decision": "REJECTED",
+      "observed_decision": "ACCEPTED",
+      "security_verdict": "FAIL",
+      "artifacts": [
+        {
+          "filename": "vulnerable-execution.json",
+          "sha256": "5555555555555555555555555555555555555555555555555555555555555555",
+          "media_type": "application/json"
+        }
+      ]
+    },
+    {
+      "execution_id": "SYNTHETIC-EXEC-PATCHED-001",
+      "role": "PATCHED",
+      "build_id": "synthetic-patched-build-1",
+      "started_at": "2026-09-04T03:00:03Z",
+      "finished_at": "2026-09-04T03:00:04Z",
+      "package": {
+        "filename": "synthetic-untrusted-9.9.0-test.ota",
+        "sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+        "signer_fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "signer_trust": "UNTRUSTED"
+      },
+      "request": {
+        "method": "POST",
+        "target": "http://127.0.0.1:8102/update",
+        "content_type": "application/octet-stream",
+        "body_sha256": "1111111111111111111111111111111111111111111111111111111111111111"
+      },
+      "response": {
+        "status_code": 403,
+        "content_type": "application/json",
+        "body_sha256": "6666666666666666666666666666666666666666666666666666666666666666"
+      },
+      "device_state_before": {
+        "device_id": "synthetic-device-001",
+        "firmware_version": "1.0.0",
+        "state_sha256": "3333333333333333333333333333333333333333333333333333333333333333"
+      },
+      "device_state_after": {
+        "device_id": "synthetic-device-001",
+        "firmware_version": "1.0.0",
+        "state_sha256": "3333333333333333333333333333333333333333333333333333333333333333"
+      },
+      "secure_expected_decision": "REJECTED",
+      "observed_decision": "REJECTED",
+      "security_verdict": "PASS",
+      "artifacts": [
+        {
+          "filename": "patched-execution.json",
+          "sha256": "7777777777777777777777777777777777777777777777777777777777777777",
+          "media_type": "application/json"
+        }
+      ]
+    },
+    {
+      "execution_id": "SYNTHETIC-EXEC-CONTROL-001",
+      "role": "POSITIVE_CONTROL",
+      "build_id": "synthetic-patched-build-1",
+      "started_at": "2026-09-04T03:00:05Z",
+      "finished_at": "2026-09-04T03:00:06Z",
+      "package": {
+        "filename": "synthetic-trusted-1.1.0.ota",
+        "sha256": "8888888888888888888888888888888888888888888888888888888888888888",
+        "signer_fingerprint": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "signer_trust": "TRUSTED"
+      },
+      "request": {
+        "method": "POST",
+        "target": "http://127.0.0.1:8102/update",
+        "content_type": "application/octet-stream",
+        "body_sha256": "8888888888888888888888888888888888888888888888888888888888888888"
+      },
+      "response": {
+        "status_code": 200,
+        "content_type": "application/json",
+        "body_sha256": "9999999999999999999999999999999999999999999999999999999999999999"
+      },
+      "device_state_before": {
+        "device_id": "synthetic-device-001",
+        "firmware_version": "1.0.0",
+        "state_sha256": "3333333333333333333333333333333333333333333333333333333333333333"
+      },
+      "device_state_after": {
+        "device_id": "synthetic-device-001",
+        "firmware_version": "1.1.0",
+        "state_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "secure_expected_decision": "ACCEPTED",
+      "observed_decision": "ACCEPTED",
+      "security_verdict": "PASS",
+      "artifacts": [
+        {
+          "filename": "positive-control-execution.json",
+          "sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+          "media_type": "application/json"
+        }
+      ]
+    }
+  ],
+  "verification_outcome": "PATCH_VERIFIED",
+  "bundle_files": [
+    {
+      "filename": "vulnerable-execution.json",
+      "sha256": "5555555555555555555555555555555555555555555555555555555555555555",
+      "media_type": "application/json"
+    },
+    {
+      "filename": "patched-execution.json",
+      "sha256": "7777777777777777777777777777777777777777777777777777777777777777",
+      "media_type": "application/json"
+    },
+    {
+      "filename": "positive-control-execution.json",
+      "sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "media_type": "application/json"
+    },
+    {
+      "filename": "verification-report.txt",
+      "sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "media_type": "text/plain"
+    }
+  ]
+}

@@ -1,0 +1,314 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://fixrepro.example/schemas/evidence.schema.json",
+  "title": "FixRepro Evidence Bundle Manifest",
+  "description": "Schema for synthetic, hash-verified security regression evidence.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "verification_id",
+    "created_at",
+    "test_case",
+    "executions",
+    "verification_outcome",
+    "bundle_files"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "verification_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "test_case": {
+      "$ref": "#/$defs/test_case"
+    },
+    "executions": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {
+        "$ref": "#/$defs/execution"
+      }
+    },
+    "verification_outcome": {
+      "enum": [
+        "PATCH_VERIFIED",
+        "PATCH_NOT_VERIFIED",
+        "INCONCLUSIVE"
+      ]
+    },
+    "bundle_files": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/artifact"
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "decision": {
+      "enum": [
+        "ACCEPTED",
+        "REJECTED",
+        "ERROR"
+      ]
+    },
+    "test_case": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "case_id",
+        "title",
+        "security_property",
+        "positive_control_case_id"
+      ],
+      "properties": {
+        "case_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        "security_property": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "positive_control_case_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        }
+      }
+    },
+    "package": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "filename",
+        "sha256",
+        "signer_fingerprint",
+        "signer_trust"
+      ],
+      "properties": {
+        "filename": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "signer_fingerprint": {
+          "$ref": "#/$defs/sha256"
+        },
+        "signer_trust": {
+          "enum": [
+            "TRUSTED",
+            "UNTRUSTED"
+          ]
+        }
+      }
+    },
+    "request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "method",
+        "target",
+        "content_type",
+        "body_sha256"
+      ],
+      "properties": {
+        "method": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 16
+        },
+        "target": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "content_type": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "body_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "response": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status_code",
+        "content_type",
+        "body_sha256"
+      ],
+      "properties": {
+        "status_code": {
+          "type": "integer",
+          "minimum": 100,
+          "maximum": 599
+        },
+        "content_type": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "body_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "device_state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "device_id",
+        "firmware_version",
+        "state_sha256"
+      ],
+      "properties": {
+        "device_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "firmware_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "state_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "filename",
+        "sha256"
+      ],
+      "properties": {
+        "filename": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "media_type": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        }
+      }
+    },
+    "execution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "execution_id",
+        "role",
+        "build_id",
+        "started_at",
+        "finished_at",
+        "package",
+        "request",
+        "response",
+        "device_state_before",
+        "device_state_after",
+        "secure_expected_decision",
+        "observed_decision",
+        "security_verdict",
+        "artifacts"
+      ],
+      "properties": {
+        "execution_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "role": {
+          "enum": [
+            "VULNERABLE",
+            "PATCHED",
+            "POSITIVE_CONTROL"
+          ]
+        },
+        "build_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "started_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "finished_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "package": {
+          "$ref": "#/$defs/package"
+        },
+        "request": {
+          "$ref": "#/$defs/request"
+        },
+        "response": {
+          "$ref": "#/$defs/response"
+        },
+        "device_state_before": {
+          "$ref": "#/$defs/device_state"
+        },
+        "device_state_after": {
+          "$ref": "#/$defs/device_state"
+        },
+        "secure_expected_decision": {
+          "$ref": "#/$defs/decision"
+        },
+        "observed_decision": {
+          "$ref": "#/$defs/decision"
+        },
+        "security_verdict": {
+          "enum": [
+            "PASS",
+            "FAIL",
+            "INCONCLUSIVE"
+          ]
+        },
+        "artifacts": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/artifact"
+          }
+        }
+      }
+    }
+  }
+}

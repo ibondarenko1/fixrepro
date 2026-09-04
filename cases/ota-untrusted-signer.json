@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0.0",
+  "case_id": "OTA-UNTRUSTED-SIGNER-001",
+  "title": "Reject an integrity-valid OTA package signed by an untrusted key",
+  "security_property": "An OTA gateway must accept an update only when package integrity is valid and the Ed25519 signature verifies against the configured trusted public key.",
+  "package_type": "synthetic-iot-ota",
+  "signer_trust": "UNTRUSTED",
+  "secure_expected_decision": "REJECTED",
+  "vulnerable_expected_observation": "ACCEPTED",
+  "patched_expected_observation": "REJECTED",
+  "initial_device_version": "1.0.0",
+  "vulnerable_result_version": "9.9.0-test",
+  "patched_result_version": "1.0.0"
+}
