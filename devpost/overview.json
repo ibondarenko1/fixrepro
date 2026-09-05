@@ -4,6 +4,7 @@
   "problem_statement": "Security patches for connected systems are often accepted as code changes without repeatable proof that unsafe behavior is gone and legitimate behavior still works.",
   "submission_status": "ready_for_manual_devpost_entry",
   "implementation_status": "phase_5a_submission_package",
+  "physical_world_proof_of_concept": "An owner-controlled Roomba s9+ produced a supported Locate melody during a separate authorized local test. It demonstrates how an accepted FixRepro result can be connected to a physical output. The Roomba did not receive firmware and was not the OTA target. The supplemental test is separate from the reproducible Docker workflow; no Roomba vulnerability, firmware test, or completed automated two-signal run is claimed.",
   "technologies_planned": [],
   "technologies_used": [
     "Python 3.12",
@@ -23,7 +24,7 @@
   ],
   "repository_url": "https://github.com/ibondarenko1/fixrepro",
   "team_mode": "solo",
-  "video_status": "script_ready_recording_pending",
+  "video_status": "final_video_ready_upload_pending",
   "screenshot_files": [
     "docs/submission/screenshots/01-dashboard-overview.png",
     "docs/submission/screenshots/02-dashboard-full.png",

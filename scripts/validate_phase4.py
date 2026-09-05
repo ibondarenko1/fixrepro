@@ -293,15 +293,14 @@ def validate_readme(failures: list[str]) -> None:
         "Background live verification",
         "Safe artifact serving",
         "Docker Compose",
-        "Phase 4 smoke validation",
+        "GitHub Actions",
     )
     for phrase in implemented:
         if phrase not in content:
             failures.append(f"README is missing implemented Phase 4 feature: {phrase}")
-    remaining = content.partition("## Remaining outside the repository")[2]
-    for phrase in ("Final video recording", "Video upload", "Devpost form entry", "Devpost submission"):
-        if phrase not in remaining:
-            failures.append(f"README must identify remaining manual work: {phrase}")
+    for stale_phrase in ("Implemented Phase 4 product", "Phase 5A", "Final video recording"):
+        if stale_phrase in content:
+            failures.append(f"README contains stale internal status language: {stale_phrase}")
 
 
 def main() -> int:

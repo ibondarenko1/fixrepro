@@ -25,10 +25,13 @@ dependencies = [
 dev = [
   "pytest>=8,<10"
 ]
+physical = [
+  "paho-mqtt>=2,<3"
+]
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["fixrepro_core*", "device*", "targets*", "verifier*", "app*"]
+include = ["fixrepro_core*", "device*", "targets*", "verifier*", "app*", "physical_witness*"]
 
 [tool.setuptools.package-data]
 app = ["static/*"]

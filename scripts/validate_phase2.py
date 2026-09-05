@@ -244,6 +244,7 @@ def validate_runner(failures: list[str]) -> None:
 
 def validate_readme(failures: list[str]) -> None:
     content = (ROOT / "README.md").read_text(encoding="utf-8")
+    normalized = content.casefold()
     implemented = (
         "Virtual device",
         "Vulnerable gateway",
@@ -253,11 +254,11 @@ def validate_readme(failures: list[str]) -> None:
         "Unit tests",
     )
     for phrase in implemented:
-        if phrase not in content:
-            failures.append(f"README is missing implemented Phase 2 component: {phrase}")
+        if phrase.casefold() not in normalized:
+            failures.append(f"README is missing implemented component: {phrase}")
 
-    if "Current status" not in content:
-        failures.append("README must describe the current implementation status")
+    if "FixRepro is the missing verification step" not in content:
+        failures.append("README must state the public product position")
 
 
 def main() -> int:

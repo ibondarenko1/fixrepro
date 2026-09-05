@@ -1,0 +1,13 @@
+{
+  "cleaning_started": false,
+  "core_evidence_bundle_member": false,
+  "core_ota_target": false,
+  "device_model": "Roomba s9+",
+  "firmware_changed": false,
+  "limitation": "This sanitized record documents one separate owner-authorized local Locate test. It does not prove an integrated two-signal run, a Roomba vulnerability, or a Roomba firmware update.",
+  "movement_observed": false,
+  "observed_result": "finite_audible_melody",
+  "role": "physical_output_witness",
+  "settings_changed": false,
+  "test_type": "owner_authorized_local_locate"
+}

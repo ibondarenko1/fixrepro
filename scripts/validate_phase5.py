@@ -140,8 +140,11 @@ def validate_metadata(failures: list[str]) -> None:
         failures.append("overview screenshot_files must list the four screenshots in order")
     if final.get("image_files") != list(SCREENSHOTS):
         failures.append("final submission image_files must list the four screenshots in order")
-    if final.get("video_status") != "script_ready_recording_pending":
-        failures.append("final submission must not claim that a video exists")
+    expected_video_status = "final_video_ready_upload_pending"
+    if final.get("video_status") != expected_video_status:
+        failures.append("final submission must say the completed video is ready for manual upload")
+    if overview.get("video_status") != expected_video_status:
+        failures.append("overview must say the completed video is ready for manual upload")
 
 
 def validate_screenshots(failures: list[str]) -> None:

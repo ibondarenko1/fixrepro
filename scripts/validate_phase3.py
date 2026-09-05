@@ -177,8 +177,8 @@ def validate_readme(failures: list[str]) -> None:
     for phrase in implemented:
         if phrase not in content:
             failures.append(f"README is missing implemented Phase 3 feature: {phrase}")
-    if "Remaining outside the repository" not in content:
-        failures.append("README must distinguish remaining manual submission work")
+    if "## Limitations" not in content:
+        failures.append("README must state current product limitations")
 
 
 def main() -> int:

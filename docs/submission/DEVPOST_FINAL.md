@@ -18,6 +18,16 @@ FixRepro runs one controlled over-the-air software update regression against syn
 
 The result is a tamper-evident evidence bundle with device state, build IDs, request and response hashes, signer identity, verdicts, and a self-contained report. A separate command checks the manifest, every listed file, the evidence schema, same-input hashes, and the recomputed outcome.
 
+## Physical-world proof of concept
+
+An owner-controlled Roomba s9+ produced a supported Locate melody during a separate authorized local test.
+
+It demonstrates how an accepted FixRepro result can be connected to a physical output. The Roomba did not receive firmware and was not the OTA target.
+
+The core Docker workflow remains synthetic and reproducible. The optional witness adapter is disabled by default, and this physical-output-witness test is supplemental.
+
+No Roomba vulnerability was tested or claimed. No Roomba firmware was installed or modified. The repository does not claim a completed automated two-signal Roomba run.
+
 ## How it works
 
 Each scenario starts by resetting the virtual device to firmware 1.0.0, the vulnerable gateway then accepts the integrity-valid untrusted package and changes the device to 9.9.0-test, the patched gateway uses Ed25519 digital-signature verification to reject the same bytes and leave the device at 1.0.0, and the positive control uses a trusted signature to reach 1.1.0.
@@ -26,9 +36,9 @@ Verdicts come from pure, deterministic rules. No LLM decides the result. `PATCH_
 
 ## How we built it
 
-I built the lab in Python 3.12 with FastAPI, Pydantic, cryptography, and HTTPX. JSON Schema Draft 2020-12 validates the evidence. Pytest covers the security policy, device behavior, orchestrator, bundle checks, API boundary, and dashboard. The frontend uses plain HTML, CSS, and JavaScript with no external asset or build step.
+I built the lab in Python 3.12 with FastAPI, Pydantic, and HTTPX. cryptography provides Ed25519 digital signatures, while JSON Schema Draft 2020-12 validates the evidence. pytest covers the security policy, device behavior, orchestrator, bundle checks, API boundary, and dashboard. The frontend uses plain HTML, CSS, and JavaScript with no external asset or build step.
 
-Docker runs the dashboard and its loopback-only child lab services in one non-root container. Compose publishes only `127.0.0.1:8000` to the host. GitHub Actions repeats the validators, tests, demonstrations, dashboard smoke checks, and Docker run.
+docker compose runs the dashboard and its loopback-only child lab services in one non-root container, publishing only `127.0.0.1:8000` to the host. GitHub Actions repeats the validators, tests, demonstrations, dashboard smoke checks, and Docker run.
 
 ## Challenges
 
@@ -38,9 +48,13 @@ The browser boundary took equal care. A client can request only one fixed run. I
 
 ## Accomplishments
 
-FixRepro now completes the full local proof from a single dashboard action. It reproduces the unsafe baseline, blocks the same input after the patch, preserves the legitimate update path, writes the evidence, independently verifies the bundle, and presents the result without recalculating it in the browser.
+FixRepro now completes the full local proof from a single dashboard action. evidence.json records the unsafe baseline, the rejected same input, the preserved legitimate path, and the observations used for the verdict.
 
-Private signing keys stay in memory and are never written to disk. The tracked demo bundle has a published root digest and can be checked offline.
+Private signing keys stay in memory and are never written to disk.
+
+manifest.sha256 anchors the tracked demo bundle so it can be checked offline.
+
+report.html presents the evidence without recalculating the result in the browser.
 
 ## What we learned
 

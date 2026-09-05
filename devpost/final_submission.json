@@ -1,5 +1,5 @@
 {
-  "accomplishments": "I built a complete local verification path: three synthetic services, strict package validation, deterministic orchestration, a positive control, a tamper-evident bundle, independent bundle checking, a judge-facing dashboard, Docker packaging, tests, and continuous integration.",
+  "accomplishments": "I built a complete local verification path: three synthetic services, strict package validation, deterministic orchestration, a positive control, a tamper-evident bundle, independent bundle checking, a judge-facing dashboard, Docker packaging, tests, and continuous integration. In a separate authorized local test, an owner-controlled Roomba s9+ produced a supported Locate melody as a supplemental physical-output witness. It received no firmware and was not the OTA target.",
   "challenges": "The hardest parts were proving byte-for-byte replay, resetting state before every scenario, avoiding circular hashes in the evidence bundle, and keeping the browser unable to select targets, packages, keys, commands, or output paths.",
   "development_declaration": "The repository, synthetic lab, evidence format, dashboard, and automation are new VoltHacks 2026 work. The general method is informed by prior security research.",
   "how_it_works": "A vulnerable gateway accepts an integrity-valid update from an untrusted signer. The patched gateway receives the exact same package bytes and rejects them through Ed25519 digital-signature verification. A trusted positive control must still update the device. Pure rules calculate the verdict from recorded observations, and an independent command checks every bundle file against its manifest.",
@@ -11,7 +11,7 @@
     "docs/submission/screenshots/04-mobile-dashboard.png"
   ],
   "inspiration": "A code change does not prove that a security patch works. Connected-system teams need a repeatable check that the unsafe behavior is gone and the legitimate feature still works.",
-  "limitation_statement": "PATCH_VERIFIED applies only to the defined signer-trust regression under the recorded test conditions. It does not prove that every vulnerability is fixed or that a build is generally secure.",
+  "limitation_statement": "PATCH_VERIFIED applies only to the defined signer-trust regression under the recorded test conditions. It does not prove that every vulnerability is fixed or that a build is generally secure. The supplemental Roomba proof records one owner-authorized Locate melody; it does not claim a completed automated two-signal run or a Roomba firmware test.",
   "problem": "Security patches for connected systems are often accepted as code changes without repeatable proof that unsafe behavior is gone and legitimate behavior still works.",
   "project_name": "FixRepro",
   "repository_url": "https://github.com/ibondarenko1/fixrepro",
@@ -34,8 +34,8 @@
     "GitHub Actions"
   ],
   "try_it_out": "Clone https://github.com/ibondarenko1/fixrepro, run docker compose up --build, then open http://127.0.0.1:8000. A repository-local Python setup is documented in README.md.",
-  "video_status": "script_ready_recording_pending",
-  "what_it_does": "FixRepro runs one controlled over-the-air software update regression against synthetic vulnerable and patched IoT builds. It replays identical unsafe input, confirms a trusted update still succeeds, records the device transitions, and publishes evidence that can be checked independently.",
+  "video_status": "final_video_ready_upload_pending",
+  "what_it_does": "FixRepro runs one controlled over-the-air software update regression against synthetic vulnerable and patched IoT builds. It replays identical unsafe input, confirms a trusted update still succeeds, records the device transitions, and publishes evidence that can be checked independently. A supplemental owner-authorized Roomba s9+ test showed how an accepted result can trigger a supported physical signal without treating the robot as the OTA target.",
   "what_we_learned": "A useful patch test needs the same input, a confirmed initial state, observable behavior, stable build identities, and a positive control. A file hash is meaningful only when the root digest is retained separately.",
-  "whats_next": "The next step is to add adapters for authorized robotics, smart-device, industrial IoT, and connected-system release labs while preserving the same narrow, deterministic evidence contract. Video recording and Devpost entry remain manual submission tasks."
+  "whats_next": "The next step is to add narrow adapters for authorized robotics, smart-device, industrial IoT, and connected-system release labs while preserving the same deterministic evidence contract. The completed video still requires manual upload, and the Devpost entry requires manual review and submission."
 }

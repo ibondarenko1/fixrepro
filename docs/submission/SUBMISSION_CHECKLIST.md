@@ -19,11 +19,12 @@
 
 ## Video checks
 
-- [ ] Record the video from the local Docker dashboard.
-- [ ] Follow the 2:10 shot list and spoken script.
+- [ ] Review the completed final video from beginning to end.
+- [ ] Confirm the real Roomba image is described only as a supplemental physical-output witness.
+- [ ] Confirm the video says the Roomba received no firmware and was not the OTA target.
+- [ ] Confirm no complete automated two-signal Roomba run is claimed.
 - [ ] Keep bookmarks, email, Devpost account data, usernames, notifications, unrelated terminals, and private material off screen.
 - [ ] Upload the video in an accessible unlisted form that Devpost can play.
-- [ ] Add `CAPTIONS.srt` or corrected captions that match the final recording.
 - [ ] Test the video while logged out.
 
 ## Devpost text checks
@@ -33,6 +34,7 @@
 - [ ] Add `https://github.com/ibondarenko1/fixrepro` as the repository URL.
 - [ ] Confirm the text calls the lab synthetic and the evidence tamper-evident.
 - [ ] Confirm `PATCH_VERIFIED` is limited to the defined regression under tested conditions.
+- [ ] Confirm the Roomba proof of concept is described as supplemental to the reproducible Docker workflow.
 
 ## Devpost upload checks
 
